@@ -424,6 +424,21 @@
     .trip-toast .trip-toast-text { flex:1 1 200px; font-size:.9rem; line-height:1.4; }
     .trip-toast .trip-toast-btn { background:#fff; color:#000 !important; border-radius:999px; padding:4px 14px; font-size:.85rem; font-weight:600; text-decoration:none; }
     .trip-toast .trip-toast-x { border:0; background:none; color:#fff; font-size:1rem; padding:0 4px; }
+
+    /* สำหรับ iPad (768px - 991px) ซ่อนเฉพาะปุ่มที่เกินมาใต้แผนที่ */
+    @media (min-width: 768px) and (max-width: 991.98px) {
+      /* ซ่อนปุ่มรีวิวและพื้นที่แจ้งเตือนที่อยู่ในฝั่งแผนที่ (.col-lg-7) */
+      .col-lg-7 .review-row-btn,
+      .col-lg-7 .route-summary-box,
+      .col-lg-7 .d-lg-none {
+        display: none !important;
+      }
+
+      /* ให้ปุ่มที่อยู่ในกรอบ Plan Your Route ฝั่งขวาแสดงตามปกติ */
+      .plan-route-panel .route-summary-box {
+        display: flex !important;
+      }
+    }
   </style>
 </head>
 <body class="safeway-home-bg">
