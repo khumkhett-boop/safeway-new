@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safeway - People / Trusted Contact (v3)</title>
+
+  <!-- Bootstrap 5 + Font Awesome 6 + ฟอนต์ Prompt -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+/* =====================================================================
+   SafeWay – Header + Footer ที่ใช้ร่วมกันทุกหน้า
+   ===================================================================== */
+:root{
+  --indigo:#3949B2;
+  --navy:#13388E;
+  --green:#34AF67;
+  --blue:#3C79C5;
+  --red:#DF3C3C;
+  --black:#000000;
+  --white:#ffffff;
+  --grey:#E9E8E8;
+  --grey-text:#6b6b6b;
+
+  --font:"Prompt","Kanit",system-ui,sans-serif;
+  --pad-x:84px;
+
+  --text:var(--black);
+  --surface:var(--white);
+  --line:var(--grey);
+  --nav-bg:var(--blue);
+  --foot-bg:var(--blue);
+  --head-blue:var(--blue);
+  --search-bg:var(--white);
+  --focus:var(--navy);
+}
+:root[data-theme="dark"]{
+  --text:var(--white);
+  --surface:var(--navy);
+  --line:var(--indigo);
+  --nav-bg:var(--navy);
+  --foot-bg:var(--navy);
+  --search-bg:var(--grey);
+  --focus:var(--white);
+}
+
+.nav,.nav *,.foot,.foot *{margin:0;padding:0;box-sizing:border-box}
+.nav,.foot{font-family:var(--font);font-size:14px;line-height:1.4}
+.nav :focus-visible,.foot :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.nav{display:block;flex-wrap:nowrap;background:var(--nav-bg);color:var(--white);position:sticky;top:0;z-index:20;overflow-x:clip}
+.nav-in{display:flex;align-items:center;gap:38px;max-width:1440px;margin:auto;
+  padding:24px min(1vw,14px) 24px var(--pad-x)}
+.logo{width:50px;height:50px;border-radius:50%;background:var(--white);display:grid;place-items:center;overflow:hidden;flex:none}
+.logo img{width:100%;height:100%;object-fit:contain;padding:3px}
+.links{display:flex;gap:56px;list-style:none;font-weight:500;font-size:18px}
+.links a{color:var(--white);text-decoration:none;padding-bottom:4px;border-bottom:2px solid transparent}
+.links a[aria-current]{border-color:var(--white)}
+.search{display:flex;align-items:center;gap:12px;background:var(--search-bg);color:var(--grey-text);border-radius:999px;padding:10px 20px;flex:1 1 auto;max-width:480px;min-width:0}
+.search input{border:0;outline:0;background:none;font:inherit;font-size:15px;width:100%;color:var(--black);min-width:0;box-shadow:none}
+.nav-ico{display:flex;gap:10px;align-items:center;margin-left:auto}
+.search+.nav-ico{margin-left:auto}
+@media (min-width:1101px){
+  .nav-in{padding-right:var(--pad-x)}
+  .links{gap:clamp(28px,3.9vw,56px)}
+  .links a{white-space:nowrap}
+  .search{flex:0 1 300px;max-width:none;margin-left:auto;padding:7px 22px;gap:12px}
+  .search .icon{width:22px;height:22px}
+  .search input{font-size:17px}
+  .search+.nav-ico{margin-left:-18px}
+}
+.circle{width:50px;height:50px;border-radius:50%;background:var(--white);color:var(--black);display:grid;place-items:center;font-size:22px;text-decoration:none}
+.circle:hover{color:var(--black)}
+.circle[aria-label="โปรไฟล์"] .icon{fill:currentColor}
+.burger{display:none;background:none;border:0;color:var(--white);font-size:32px;cursor:pointer}
+
+.drawer{display:block;position:absolute;top:100%;right:0;z-index:30;width:clamp(240px,34vw,300px);overflow:hidden;
+  filter:drop-shadow(0 10px 12px rgba(19,56,142,.18));
+  visibility:hidden;transition:visibility 0s linear .28s}
+.drawer.open{visibility:visible;transition:visibility 0s}
+.drawer-in{padding:36px 0 40px;background:var(--surface);color:var(--text);border-bottom:3px solid var(--head-blue);border-radius:0 0 20px 20px;
+  transform:translateY(-100%);transition:transform .28s ease}
+.drawer.open .drawer-in{transform:translateY(0)}
+.drawer a{display:block;color:inherit;text-decoration:none;font-weight:600;font-size:18px;padding:14px 36px}
+.drawer a:hover,.drawer a:focus-visible{background:var(--line);color:inherit}
+.drawer .m-only{display:none} 
+@media (min-width:1101px){.drawer{display:none!important}}
+
+.foot{background:var(--foot-bg);color:var(--white);padding:52px 0 80px}
+.foot-in{max-width:1440px;margin:auto;padding:0 var(--pad-x);display:grid;grid-template-columns:44% 24% 1fr;column-gap:0}
+.foot h4{font-size:20px;font-weight:500;margin-bottom:10px;line-height:1.4}
+.foot-in>div:first-child h4{font-size:26px}
+.foot p{font-size:14px;font-weight:300}
+.foot-in>div:first-child p{max-width:520px}
+.social{display:flex;gap:10px;flex-wrap:wrap}
+.social a{width:64px;height:64px;border-radius:50%;background:var(--white);color:var(--blue);display:grid;place-items:center;font-size:40px;line-height:1;text-decoration:none}
+.social a img{width:24px;height:24px;object-fit:contain}
+
+@media (max-width:1100px){
+  :root{--pad-x:64px}
+  .nav-in{gap:14px;padding:20px var(--pad-x)}
+  .logo{width:64px;height:64px}
+  .links{display:none}
+  .burger{display:block}
+  .search{flex:1;max-width:none;padding:8px 18px}
+  .nav-ico{gap:16px;margin-left:12px}
+  .circle{width:50px;height:50px}
+  .nav-ico .burger{margin-left:2px}
+  .foot{padding:56px 0 70px}
+  .foot-in{grid-template-columns:1fr 1fr 1.6fr;column-gap:20px}
+  .foot-in>div:first-child h4{font-size:18px}
+  .foot h4{font-size:18px}
+  .social a{width:52px;height:52px;font-size:32px}
+  .social{gap:6px}
+}
+
+@media (max-width:599px){
+  :root{--pad-x:34px}
+  .nav-in{gap:15px;padding:23px var(--pad-x)}
+  .logo{width:46px;height:46px}
+  .search{padding:5px 12px;font-size:12px}
+  .search input{font-size:12px}
+  .nav-ico{margin-left:4px}
+  /* ซ่อนรูปโปรไฟล์ในมือถือ */
+  .nav-ico .profile-circle {display:none}
+  /* ซ่อนกระดิ่งในมือถือ เพราะจะไปใช้ใน Hamburger menu แทน */
+  .nav-ico .noti-desktop {display:none !important;}
+  .burger{font-size:30px}
+  .drawer{width:clamp(220px,62vw,280px)}
+  .drawer-in{padding:16px 0 20px;border-radius:0 0 24px 24px}
+  .drawer a{font-size:15px;font-weight:500;padding:12px 24px; cursor: pointer;}
+  .drawer .m-only{display:block}
+  .foot{padding:36px 0 44px}
+  .foot-in{grid-template-columns:1fr;row-gap:18px}
+  .foot-in>div:first-child h4,.foot h4{font-size:16px}
+  .foot p{font-size:12px}
+  .social a{width:56px;height:56px;font-size:34px}
+  .social a img{width:19px;height:19px}
+}
+@media (prefers-reduced-motion:reduce){.nav *{transition:none!important}}
+
+/* =====================================================================
+   ส่วนของหน้า People / Trusted Contact
+   ===================================================================== */
+:root {
+  --blue-dark: #2f55a4;
+}
+body { font-family: var(--font); background: var(--blue); }
+
+.page-pad { padding-left: var(--pad-x); padding-right: var(--pad-x); max-width: 1440px; margin-left: auto; margin-right: auto; }
+
+.hero {
+  position: relative;
+  background-color: #cfe9c9;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+  background-image: url('../img/Bg-Mobile.JPG'), linear-gradient(#8ec8f5, #cfe9c9);
+}
+@media (min-width: 768px) {
+  .hero { background-image: url('../img/Bg-Tablet.JPG'), linear-gradient(#8ec8f5, #cfe9c9); }
+}
+@media (min-width: 1200px) {
+  .hero { background-image: url('../img/Bg-Desktop.PNG'), linear-gradient(#8ec8f5, #cfe9c9); }
+}
+
+.page-title { font-size: 1.9rem; font-weight: 500; margin: 0; }
+.page-sub { font-size: .95rem; }
+@media (max-width: 767px) { .page-title { font-size: 1.2rem; } .page-sub { font-size: .75rem; } }
+
+.btn-add {
+  background: var(--blue); color: #fff; border-radius: 12px; padding: 10px 28px;
+  display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 3px 6px rgba(0,0,0,.2);
+}
+.btn-add:hover { background: var(--blue-dark); color: #fff; }
+.btn-add .plus {
+  background: #fff; color: var(--blue); width: 26px; height: 26px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 12px;
+}
+@media (max-width: 767px) { .btn-add { width: 100%; justify-content: center; margin-top: 8px; padding: 8px; font-size: .8rem; } }
+
+.btn-back { background: none; border: 0; font-size: 1.5rem; line-height: 1; padding: 0 6px 0 0; color: #000; }
+
+.pill {
+  background: #fff; border: 0; border-radius: 50px; padding: 4px 28px; min-width: 90px; font-size: .9rem;
+}
+.pill.active { background: var(--blue); color: #fff; }
+.pill:hover:not(.active) { background: #e4ecf8; }
+@media (max-width: 767px) { .pill { padding: 3px 14px; font-size: .7rem; min-width: 0; } }
+
+.white-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+
+.contact-item {
+  display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 10px;
+  background: #f5f5f5; margin-bottom: 8px; cursor: pointer; transition: background .2s;
+}
+.contact-item:hover { background: #e9e9e9; }
+.contact-item.selected { background: #c9c9c9; }
+.avatar { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; background: #bbb; flex-shrink: 0; }
+.avatar-lg { width: var(--d-avatar, 70px); height: var(--d-avatar, 70px); border-radius: 50%; object-fit: cover; background: #bbb; flex-shrink: 0; }
+.contact-name { font-weight: 500; font-size: 1.05rem; }
+.contact-info { font-size: .72rem; }
+.badge-sw { color: #fff; font-size: .68rem; padding: 1px 14px; border-radius: 50px; margin-left: 10px; display: inline-block; }
+.b-Friends, .b-Family, .b-on { background: var(--green); }
+.b-Emergency { background: var(--red); }
+.b-on { padding: 0 10px; margin-left: 6px; }
+.contact-item .actions { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.contact-item .actions button { background: none; border: 0; padding: 0; color: #000; font-size: .95rem; }
+@media (max-width: 767px) {
+  .avatar { width: 46px; height: 46px; }
+  .contact-name { font-size: .9rem; }
+  .contact-info { font-size: .62rem; }
+}
+
+.detail-head { display: flex; align-items: flex-start; gap: var(--d-gap, 1rem); padding: var(--d-pad, 1rem); position: relative; }
+.d-text { min-width: 0; padding-right: var(--d-pr, 0); }
+.d-name { font-weight: 600; font-size: var(--d-name, 1.25rem); line-height: 1.3; }
+.d-phone { font-size: var(--d-phone, .875rem); margin-top: .25rem; white-space: nowrap; }
+.detail-head .badge-sw { font-size: var(--d-badge, .68rem); padding-left: var(--d-badge-px, 14px); padding-right: var(--d-badge-px, 14px); margin-left: var(--d-badge-ml, 10px); }
+.min-w-0 { min-width: 0; }
+.info-row { display: flex; align-items: center; gap: var(--d-gap2, 14px); padding: var(--d-rowy, 12px) var(--d-rowx, 16px); border-top: 1px solid #ddd; }
+.info-row small { font-size: var(--d-small, .875rem); }
+.info-title { font-weight: 500; font-size: var(--d-title, 1rem); }
+.info-title .b-on { font-size: var(--d-badge, .68rem); padding: 0 var(--d-on-px, 10px); margin-left: var(--d-on-ml, 6px); }
+.icon-big { font-size: var(--d-icon, 1.9rem); width: var(--d-iconw, 40px); text-align: center; flex-shrink: 0; }
+.act-box { padding: var(--d-rowx, 1rem); border-top: 1px solid #dee2e6; }
+.act-title { font-weight: 600; font-size: var(--d-title, 1rem); margin-bottom: .5rem; }
+.btn-view { background: var(--blue); color: #fff; border-radius: 50px; padding: 6px; }
+#detailView .btn-view { font-size: var(--d-title, 1rem); padding: var(--d-btn-py, 6px); }
+.btn-view:hover { background: var(--blue-dark); color: #fff; }
+.expand-btn { position: absolute; right: 14px; top: 10px; background: none; border: 0; font-size: .9rem; }
+.map-box { height: var(--d-map, 260px); background: #ececec; position: relative; z-index: 0; isolation: isolate; }
+.live-dot { width: 18px; height: 18px; border-radius: 50%; background: #3b82f6; border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(59,130,246,.3); }
+
+#addView {
+  --s: calc(100cqw / 519);
+  --a-h: 550; --a-r: 20;
+  --a-pl: 51; --a-pt: 49; --a-pr: 63; --a-pb: 135;
+  --a-title-h: 59; --a-title: 32;
+  --a-g1: 39; --a-g2: 39;
+  --a-box-h: 170; --a-box-r: 14; --a-box-pt: 28; --a-box-px: 21;
+  --a-label: 16; --a-label-h: 24; --a-input-mt: 24; --a-input-h: 68; --a-input-fs: 17.6; --a-input-r: 12;
+  --a-btn-h: 59; --a-btn-fs: 16; --a-btn-r: 12;
+  min-height: calc(var(--a-h) * var(--s));
+  border-radius: calc(var(--a-r) * var(--s));
+}
+#addView .add-body { padding: calc(var(--a-pt) * var(--s)) calc(var(--a-pr) * var(--s)) calc(var(--a-pb) * var(--s)) calc(var(--a-pl) * var(--s)); }
+#addView .add-head { display: flex; align-items: center; justify-content: center; gap: calc(18 * var(--s)); height: calc(var(--a-title-h) * var(--s)); margin-bottom: calc(var(--a-g1) * var(--s)); }
+#addView .add-title { font-size: calc(var(--a-title) * var(--s)); font-weight: 500; line-height: 1.2; margin: 0; white-space: nowrap; }
+#addView .btn-back { padding: 0; font-size: calc(var(--a-title) * var(--s)); }
+#addView .share-box { background: #f1f1f1; border-radius: calc(var(--a-box-r) * var(--s)); height: calc(var(--a-box-h) * var(--s)); padding: calc(var(--a-box-pt) * var(--s)) calc(var(--a-box-px) * var(--s)) 0; }
+#addView .share-label { font-size: calc(var(--a-label) * var(--s)); line-height: calc(var(--a-label-h) * var(--s)); height: calc(var(--a-label-h) * var(--s)); padding-left: calc(var(--a-box-px) * var(--s) * .45); white-space: nowrap; }
+#addView .link-input { display: block; width: 100%; background: #d9d9d9; border: 0; border-radius: calc(var(--a-input-r) * var(--s)); margin-top: calc(var(--a-input-mt) * var(--s)); height: calc(var(--a-input-h) * var(--s)); font-size: calc(var(--a-input-fs) * var(--s)); line-height: 1; padding: 0 calc(var(--a-box-px) * var(--s) * .4); text-align: center; text-overflow: ellipsis; box-shadow: none; }
+#addView .btn-copy { display: block; width: 100%; margin-top: calc(var(--a-g2) * var(--s)); height: calc(var(--a-btn-h) * var(--s)); font-size: calc(var(--a-btn-fs) * var(--s)); border: 0; border-radius: calc(var(--a-btn-r) * var(--s)); background: var(--blue); color: #fff; padding: 0; line-height: 1; }
+#addView .btn-copy:hover { background: var(--blue-dark); color: #fff; }
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  #addView {
+    --s: calc(100cqw / 222);
+    --a-h: 286; --a-r: 20;
+    --a-pl: 12; --a-pt: 37; --a-pr: 13; --a-pb: 52;
+    --a-title-h: 20; --a-title: 14.4;
+    --a-g1: 35; --a-g2: 35;
+    --a-box-h: 74; --a-box-r: 8; --a-box-pt: 10; --a-box-px: 11;
+    --a-label: 9.5; --a-label-h: 14; --a-input-mt: 10; --a-input-h: 30; --a-input-fs: 8.8; --a-input-r: 6;
+    --a-btn-h: 33; --a-btn-fs: 9.5; --a-btn-r: 6;
+  }
+  #peopleWrap:not([data-mode="expand"]) #detailView {
+    --s: calc(100cqw / 222);
+    --d-pad: calc(12 * var(--s));
+    --d-gap: calc(9 * var(--s));
+    --d-avatar: calc(55 * var(--s));
+    --d-name: calc(13.5 * var(--s));
+    --d-pr: calc(16 * var(--s));
+    --d-phone: calc(9 * var(--s));
+    --d-badge: calc(7 * var(--s));
+    --d-badge-px: calc(9 * var(--s));
+    --d-badge-ml: 0px;
+    --d-on-px: calc(6 * var(--s));
+    --d-on-ml: calc(5 * var(--s));
+    --d-rowy: calc(9 * var(--s));
+    --d-rowx: calc(12 * var(--s));
+    --d-gap2: calc(9 * var(--s));
+    --d-icon: calc(19 * var(--s));
+    --d-iconw: calc(24 * var(--s));
+    --d-title: calc(10.5 * var(--s));
+    --d-small: calc(8.3 * var(--s));
+    --d-btn-py: calc(4 * var(--s));
+    --d-map: calc(283 * var(--s));
+  }
+}
+
+@media (max-width: 767.98px) {
+  #addView {
+    --s: min(calc(100cqw / 333), 1.15px);
+    --a-h: 355; --a-r: 20;
+    --a-pl: 26; --a-pt: 26; --a-pr: 26; --a-pb: 0;
+    --a-title-h: 30; --a-title: 16;
+    --a-g1: 26; --a-g2: 39;
+    --a-box-h: 111; --a-box-r: 12; --a-box-pt: 14; --a-box-px: 22;
+    --a-label: 12; --a-label-h: 19; --a-input-mt: 21; --a-input-h: 30; --a-input-fs: 11; --a-input-r: 8;
+    --a-btn-h: 32; --a-btn-fs: 12; --a-btn-r: 8;
+  }
+  #addView .add-head { justify-content: flex-start; }
+  #addView .btn-back { font-size: 1.1rem; }
+}
+
+.people-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.people-row > * { min-width: 0; }
+#panelCol { container-type: inline-size; align-self: start; }
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .people-row { grid-template-columns: minmax(0, 462fr) minmax(0, 222fr); column-gap: 3.116%; }
+}
+@media (min-width: 1200px) {
+  .people-row { grid-template-columns: minmax(0, 732fr) minmax(0, 519fr); column-gap: 22px; }
+}
+
+@media (max-width: 767px) {
+  #peopleWrap[data-mode="list"] #panelCol { display: none; }
+  #peopleWrap:not([data-mode="list"]) #listCol { display: none; }
+}
+#peopleWrap[data-mode="add"] #detailView { display: none; }
+#peopleWrap[data-mode="add"] #addView { display: block !important; }
+#peopleWrap[data-mode="expand"] #listCol { display: none; }
+#peopleWrap[data-mode="expand"] .people-row { grid-template-columns: minmax(0, 1fr); }
+#peopleWrap[data-mode="expand"] #panelCol { display: block; }
+#peopleWrap[data-mode="expand"] #expandBtn { display: none; }
+#peopleWrap[data-mode="expand"] #backTop { display: block !important; }
+#peopleWrap[data-mode="expand"] .map-box { height: 380px; }
+
+.map-full { position: fixed; inset: 0; z-index: 2000; background: #e9e8e8; display: none; }
+.map-full.open { display: block; }
+body.map-open { overflow: hidden; }
+#mapBig { position: absolute; inset: 0; }
+.map-close { position: absolute; top: 16px; right: 16px; z-index: 1100; width: 48px; height: 48px; border-radius: 50%; border: 0; background: #fff; color: #000; font-size: 1.3rem; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.map-close:hover { background: #f1f1f1; }
+.map-chip { position: absolute; top: 16px; left: 16px; z-index: 1100; max-width: calc(100% - 96px); display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 50px; padding: 6px 18px 6px 6px; box-shadow: 0 2px 8px rgba(0,0,0,.3); font-family: var(--font); }
+.map-chip img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #bbb; }
+.map-chip .mf-name { font-weight: 500; line-height: 1.2; }
+.map-chip small { display: block; font-size: .72rem; line-height: 1.2; }
+
+.mascot { display: none; position: absolute; right: 6%; bottom: 20px; width: 200px; pointer-events: none; }
+@media (min-width: 768px) { #peopleWrap[data-mode="add"] .mascot { display: block; } }
+
+/* =====================================================================
+   Notification Styles
+   ===================================================================== */
+/* ซ่อนลูกศร Dropdown ของ Bootstrap (Desktop) */
+.noti-circle::after { 
+  display: none !important; 
+}
+/* จุดสีแดงแจ้งเตือน */
+.noti-dot {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 11px;
+  height: 11px;
+  background-color: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--white);
+}
+/* กล่องแจ้งเตือน (จอคอม/แท็บเล็ต) */
+.noti-menu {
+  width: 320px;
+  border-radius: 20px;
+  margin-top: 15px !important;
+}
+/* จุดสีแดงแจ้งเตือนในเมนูแฮมเบอร์เกอร์ */
+.noti-dot-mobile {
+  position: absolute;
+  top: 18px;
+  left: 155px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--red);
+  border-radius: 50%;
+}
+</style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 1 1 12 0v6l2 2H4z"/><path d="M10 21h4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="home.html" aria-label="SafeWay">
+      <img src="../img/logo.png" alt="SafeWay" onerror="this.style.display='none'">
+    </a>
+    <nav aria-label="เมนูหลัก">
+      <ul class="links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="map.html">Map</a></li>
+        <li><a href="savedplace.html">Saved Places</a></li>
+        <li><a href="people.html" aria-current="page">People</a></li>
+      </ul>
+    </nav>
+    <form class="search" action="search.html" method="get" role="search">
+      <svg class="icon" width="18" height="18"><use href="#i-search"/></svg>
+      <input type="search" name="q" placeholder="ค้นหาเส้นทาง" aria-label="ค้นหาเส้นทาง">
+    </form>
+    
+    <div class="nav-ico">
+      <!-- เพิ่มคลาส profile-circle เพื่อไว้ซ่อนในมือถือ -->
+      <a class="circle profile-circle" href="setting.html" aria-label="โปรไฟล์"><svg class="icon"><use href="#i-user"/></svg></a>
+
+      <!-- ปุ่มกระดิ่ง (Dropdown) สำหรับจอคอม/แท็บเล็ต เพิ่มคลาส noti-desktop -->
+      <div class="dropdown d-inline-flex noti-desktop">
+        <a class="circle noti-circle dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="การแจ้งเตือน">
+          <svg class="icon"><use href="#i-bell"/></svg>
+          <span class="noti-dot"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end noti-menu shadow border-0">
+          <div class="px-4 pt-4 pb-3">
+            <h5 class="mb-0 fw-bold" style="font-size: 1.15rem; color: #000;">Notifications</h5>
+          </div>
+          <hr class="my-0 mx-3" style="border-color: #d4d4d4; opacity: 1;">
+          <div class="px-4 py-4 text-dark">
+            <p class="mb-3" style="font-size: 1rem; line-height: 1.4;">
+              <strong>Kento Yamazaki</strong> shared live<br>location with you
+            </p>
+            <p class="mb-1" style="font-size: 1rem; line-height: 1.4;">
+              Routes around Silpakorn Univ.<br>have normal lighting
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <button class="burger" id="burger" type="button" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="drawer"><svg class="icon"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+  
+  <!-- เมนูที่เลื่อนลงมา (tablet / mobile) -->
+  <nav class="drawer" id="drawer" aria-label="เมนูมือถือ">
+    <div class="drawer-in">
+      <a href="home.html">Home</a>
+      <a href="map.html">Map</a>
+      <a href="savedplace.html">Saved Places</a>
+      <a href="people.html">People</a>
+      <a href="setting.html" class="m-only">Profile &amp; Settings</a>
+      
+      <!-- ปุ่ม New Message ที่กดแล้วจะเปิด Pop-up Modal แจ้งเตือนขึ้นมาแทน -->
+      <a href="#" class="m-only position-relative" data-bs-toggle="modal" data-bs-target="#mobileNotiModal" id="mobileNotiLink">
+        New Message
+        <span class="noti-dot-mobile"></span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main class="hero flex-grow-1" id="peopleWrap" data-mode="list">
+  <div class="container-fluid page-pad pt-4 pb-5">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+      <div class="d-flex align-items-start gap-2">
+        <button class="btn-back d-none" id="backTop" type="button"><i class="fa-solid fa-arrow-left"></i></button>
+        <div>
+          <h1 class="page-title">People / Trusted Contact</h1>
+          <p class="page-sub mb-0">Add trusted friends and family to stay connected and share you location safely</p>
+        </div>
+      </div>
+      <button class="btn btn-add" id="addBtn" type="button">
+        <span class="plus"><i class="fa-solid fa-plus"></i></span> Add New Contact
+      </button>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 my-3" id="filters">
+      <button class="pill active" data-filter="All">All</button>
+      <button class="pill" data-filter="Friends">Friends</button>
+      <button class="pill" data-filter="Family">Family</button>
+      <button class="pill" data-filter="Emergency">Emergency</button>
+    </div>
+
+    <div class="people-row" id="peopleRow">
+      <div id="listCol">
+        <div class="white-card p-2 p-md-3">
+          <div id="contactList"></div>
+          <small class="d-block mt-2 text-dark" id="countText">Showing 6 of 6 contacts</small>
+        </div>
+      </div>
+
+      <div id="panelCol">
+        <div class="white-card panel-card" id="detailView">
+          <div class="detail-head">
+            <img src="../img/ken.png" alt="" class="avatar-lg" id="dAvatar">
+            <div class="d-text">
+              <div class="d-name" id="dName">Ken Yamazaki</div>
+              <span class="badge-sw b-Friends" id="dBadge">Friends</span>
+              <div class="d-phone"><i class="fa-solid fa-phone"></i> <span id="dPhone">+66 66 666 6666</span></div>
+            </div>
+            <button class="expand-btn" id="expandBtn" type="button" title="Expand"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+          </div>
+
+          <div class="info-row">
+            <i class="fa-solid fa-location-arrow icon-big"></i>
+            <div class="min-w-0">
+              <div class="info-title">Location Sharing <span class="badge-sw b-on">on</span></div>
+              <small>Sharing your location in real-time</small>
+            </div>
+          </div>
+          <div class="info-row">
+            <i class="fa-solid fa-location-dot icon-big"></i>
+            <div class="min-w-0">
+              <div class="info-title">Location</div>
+              <small class="d-block">Near Silpakorn University</small>
+              <small class="d-block" id="dSeen">Last seen 2 min ago</small>
+            </div>
+          </div>
+          <div class="act-box">
+            <div class="act-title">Contact Actions</div>
+            <a href="map.html" class="btn btn-view w-100" id="viewLocBtn"><i class="fa-solid fa-location-dot me-2"></i>View Location</a>
+          </div>
+          <div class="map-box" id="map"></div>
+        </div>
+
+        <div class="white-card panel-card d-none" id="addView">
+          <div class="add-body">
+            <div class="add-head">
+              <button class="btn-back d-md-none" id="backAdd" type="button"><i class="fa-solid fa-arrow-left"></i></button>
+              <h2 class="add-title">Add New Contact</h2>
+            </div>
+            <div class="share-box">
+              <div class="share-label">Share your link</div>
+              <input type="text" class="form-control link-input" id="shareLink" value="https://www.safeway.com/Name/" readonly>
+            </div>
+            <button class="btn btn-copy" id="copyBtn" type="button">Copy Link</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <img src="images/mascot.png" alt="" class="mascot" onerror="this.style.display='none'">
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <div><h4>About us</h4><p>Smart route planning and personal safety web app designed to keep your everyday journey secure and worry-free.</p></div>
+    <div><h4>Contact Us</h4><p>Email : safeway@gmail.com<br>Tel : 012-345-6789</p></div>
+    <div><h4>Follow Us</h4>
+      <div class="social">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-square-facebook" aria-hidden="true"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+        <a href="#" aria-label="LINE"><i class="fa-brands fa-line" aria-hidden="true"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+        <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="map-full" id="mapFull" role="dialog" aria-modal="true" aria-label="Map">
+  <div id="mapBig"></div>
+  <div class="map-chip">
+    <img src="images/ken.png" alt="" id="mfAvatar">
+    <div><div class="mf-name" id="mfName"></div><small id="mfSeen"></small></div>
+  </div>
+  <button class="map-close" id="mapClose" type="button" aria-label="Close map"><i class="fa-solid fa-xmark"></i></button>
+</div>
+
+<!-- =====================================================================
+     Mobile Notification Modal (Pop-up ที่เด้งขึ้นมาเมื่อกด New Message ในมือถือ)
+     ===================================================================== -->
+<div class="modal fade" id="mobileNotiModal" tabindex="-1" aria-labelledby="mobileNotiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow" style="border-radius: 20px; border: none;">
+      <div class="modal-header border-0 px-4 pt-4 pb-1">
+        <h5 class="modal-title fw-bold" id="mobileNotiModalLabel" style="font-size: 1.25rem; color: #000;">Notifications</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <hr class="my-3 mx-3" style="border-color: #d4d4d4; opacity: 1;">
+      <div class="modal-body px-4 pb-4 pt-0 text-dark">
+        <p class="mb-3" style="font-size: 1rem; line-height: 1.4;">
+          <strong>Kento Yamazaki</strong> shared live<br>location with you
+        </p>
+        <p class="mb-1" style="font-size: 1rem; line-height: 1.4;">
+          Routes around Silpakorn Univ.<br>have normal lighting
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const ICONS = {
+  phone: "fa-solid fa-phone",
+  pin:   "fa-solid fa-location-dot",
+  more:  "fa-solid fa-ellipsis-vertical"
+};
+
+let contacts = [
+  { id: 1, name: "Ken",  full: "Ken Yamazaki", type: "Friends",   phone: "+66 66 666 6666", seen: "1 min ago",  img: "../img/ken.png", lat: 13.8203, lng: 100.0407 },
+  { id: 2, name: "Kana", full: "Kana Komatsu",         type: "Family",    phone: "+66 66 666 6666", seen: "30 min ago", img: "../img/kana.png", lat: 13.818, lng: 100.044 },
+  { id: 3, name: "Mina", full: "Mina Kosuki",         type: "Friends",   phone: "+66 66 666 6666", seen: "3 min ago",  img: "../img/mina.png", lat: 13.8225, lng: 100.0385 },
+  { id: 4, name: "Aoi",  full: "Aoi Mamoto",          type: "Friends",   phone: "+66 66 666 6666", seen: "45 min ago", img: "../img/aoi.png", lat: 13.816, lng: 100.036 },
+  { id: 5, name: "Nami", full: "Nami Komatsu",         type: "Emergency", phone: "+66 66 666 6666", seen: "1 min ago",  img: "../img/nami.png", lat: 13.821, lng: 100.043 },
+  { id: 6, name: "Rina", full: "Rina Momochi",         type: "Friends",   phone: "+66 66 666 6666", seen: "50 min ago", img: "../img/rina.png", lat: 13.824, lng: 100.0425 }
+];
+
+const GOOGLE_MAPS_API_KEY = "";
+
+function createMapView(el, c, big) {
+  if (window.google && google.maps && google.maps.marker) {
+    const m = new google.maps.Map(el, {
+      center: { lat: c.lat, lng: c.lng }, zoom: 17, mapId: "DEMO_MAP_ID",
+      disableDefaultUI: true, zoomControl: !!big, gestureHandling: "greedy"
+    });
+    const mk = new google.maps.marker.AdvancedMarkerElement({ map: m, position: { lat: c.lat, lng: c.lng } });
+    return {
+      show(p) { const pos = { lat: p.lat, lng: p.lng }; m.setCenter(pos); m.setZoom(17); mk.position = pos; },
+      resize() { google.maps.event.trigger(m, "resize"); }
+    };
+  }
+  const f = document.createElement("iframe");
+  f.style.cssText = "border:0;width:100%;height:100%;display:block";
+  f.referrerPolicy = "no-referrer-when-downgrade";
+  f.allowFullscreen = true;
+  f.title = "Map";
+  el.appendChild(f);
+  let last = "";
+  return {
+    show(p) {
+      const src = `https://maps.google.com/maps?q=${p.lat},${p.lng}&z=17&hl=th&output=embed`;
+      if (src !== last) { last = src; f.src = src; }
+    },
+    resize() {}
+  };
+}
+
+let smallView = null, bigView = null;
+function showOnMap(c) { if (smallView) smallView.show(c); }
+function refreshMap() {
+  setTimeout(() => { if (!smallView) return; smallView.resize(); const c = contacts.find(x => x.id === selectedId); if (c) showOnMap(c); }, 150);
+}
+
+const mapFull = document.getElementById("mapFull");
+function openFullMap(c) {
+  if (!c) return;
+  document.getElementById("mfAvatar").src = c.img;
+  document.getElementById("mfName").textContent = c.full;
+  document.getElementById("mfSeen").textContent = "Last seen " + c.seen + " - Near Silpakorn University";
+  mapFull.classList.add("open");
+  document.body.classList.add("map-open");
+  if (!bigView) bigView = createMapView(document.getElementById("mapBig"), c, true);
+  bigView.show(c);
+  setTimeout(() => bigView.resize(), 50);
+  document.getElementById("mapClose").focus();
+}
+function closeFullMap() {
+  mapFull.classList.remove("open");
+  document.body.classList.remove("map-open");
+}
+document.getElementById("mapClose").addEventListener("click", closeFullMap);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && mapFull.classList.contains("open")) closeFullMap(); });
+document.getElementById("viewLocBtn").addEventListener("click", e => {
+  e.preventDefault();
+  openFullMap(contacts.find(x => x.id === selectedId));
+});
+
+let currentFilter = "All";
+let selectedId = 1;
+
+const wrap = document.getElementById("peopleWrap");
+const listEl = document.getElementById("contactList");
+const isMobile = () => window.innerWidth < 768;
+
+function renderList() {
+  const shown = contacts.filter(c => currentFilter === "All" || c.type === currentFilter);
+  listEl.innerHTML = "";
+
+  shown.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "contact-item" + (c.id === selectedId ? " selected" : "");
+    div.innerHTML = `
+      <img src="${c.img}" class="avatar" alt="${c.name}">
+      <div>
+        <div><span class="contact-name">${c.name}</span><span class="badge-sw b-${c.type}">${c.type}</span></div>
+        <div class="contact-info"><i class="${ICONS.phone}"></i> ${c.phone}</div>
+        <div class="contact-info">Last seen ${c.seen} - Near Silpakorn University</div>
+      </div>
+      <div class="actions">
+        <button class="btn-pin" title="View location"><i class="${ICONS.pin}"></i></button>
+        <div class="dropdown">
+          <button data-bs-toggle="dropdown" title="More"><i class="${ICONS.more}"></i></button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item btn-detail" href="#">View details</a></li>
+            <li><a class="dropdown-item btn-map" href="map.html">View on map</a></li>
+            <li><a class="dropdown-item text-danger btn-del" href="#">Remove contact</a></li>
+          </ul>
+        </div>
+      </div>`;
+
+    div.addEventListener("click", () => selectContact(c.id));
+    div.querySelector(".btn-pin").addEventListener("click", e => { e.stopPropagation(); openFullMap(c); });
+    div.querySelector(".btn-map").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); openFullMap(c); });
+    div.querySelector(".btn-detail").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); selectContact(c.id, true); });
+    div.querySelector(".btn-del").addEventListener("click", e => {
+      e.preventDefault(); e.stopPropagation();
+      contacts = contacts.filter(x => x.id !== c.id);
+      renderList();
+    });
+    listEl.appendChild(div);
+  });
+
+  document.getElementById("countText").textContent = `Showing ${shown.length} of ${contacts.length} contacts`;
+}
+
+function selectContact(id, forceExpand) {
+  const c = contacts.find(x => x.id === id);
+  if (!c) return;
+  selectedId = id;
+
+  document.getElementById("dAvatar").src = c.img;
+  document.getElementById("dName").textContent = c.full;
+  document.getElementById("dPhone").textContent = c.phone;
+  document.getElementById("dSeen").textContent = "Last seen " + c.seen;
+  const b = document.getElementById("dBadge");
+  b.textContent = c.type;
+  b.className = "badge-sw b-" + c.type;
+
+  showOnMap(c);
+  renderList();
+
+  if (forceExpand || isMobile()) setMode("expand");
+  else if (wrap.dataset.mode === "add") setMode("list");
+}
+
+function setMode(mode) { wrap.dataset.mode = mode; window.scrollTo({ top: 0, behavior: "smooth" }); refreshMap(); }
+
+document.querySelectorAll("#filters .pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#filters .pill").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    renderList();
+    if (wrap.dataset.mode !== "list") setMode("list");
+  });
+});
+
+document.getElementById("addBtn").addEventListener("click", () => setMode("add"));
+document.getElementById("expandBtn").addEventListener("click", () => setMode("expand"));
+document.getElementById("backTop").addEventListener("click", () => setMode("list"));
+document.getElementById("backAdd").addEventListener("click", () => setMode("list"));
+
+document.getElementById("copyBtn").addEventListener("click", function () {
+  const input = document.getElementById("shareLink");
+  input.select();
+  (navigator.clipboard ? navigator.clipboard.writeText(input.value) : Promise.resolve(document.execCommand("copy")))
+    .then(() => {
+      this.textContent = "Copied!";
+      setTimeout(() => (this.textContent = "Copy Link"), 2000);
+    });
+});
+
+const burger = document.getElementById("burger");
+const drawer = document.getElementById("drawer");
+function setMenu(open) {
+  drawer.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", open ? "true" : "false");
+}
+burger.addEventListener("click", e => {
+  e.stopPropagation();
+  setMenu(!drawer.classList.contains("open"));
+});
+document.addEventListener("click", e => { if (!drawer.contains(e.target)) setMenu(false); });
+
+// ปิด Hamburger Menu ทันทีที่กดปุ่ม New Message (เพื่อให้ Pop-up เด้งขึ้นมากลางจอเพียวๆ)
+document.getElementById("mobileNotiLink").addEventListener("click", () => {
+  setMenu(false);
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && drawer.classList.contains("open")) { setMenu(false); burger.focus(); }
+});
+window.addEventListener("resize", () => { if (window.innerWidth > 1100) setMenu(false); });
+
+renderList();
+
+function initMaps() {
+  const c = contacts.find(x => x.id === selectedId) || contacts[0];
+  smallView = createMapView(document.getElementById("map"), c, false);
+  smallView.show(c);
+}
+if (GOOGLE_MAPS_API_KEY) {
+  window.__gmReady = initMaps;
+  const s = document.createElement("script");
+  s.src = "https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(GOOGLE_MAPS_API_KEY) + "&language=th&region=TH&libraries=marker&v=weekly&callback=__gmReady";
+  s.async = true;
+  s.onerror = initMaps;
+  document.head.appendChild(s);
+} else {
+  initMaps();
+}
+</script>
+</body>
+</html>

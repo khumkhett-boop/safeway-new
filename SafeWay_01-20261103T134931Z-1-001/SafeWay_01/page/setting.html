@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile & Settings | SafeWay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('safeway-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+/* ===== Color palette & theme tokens ===== */
+:root{
+  --indigo:#3949B2; --navy:#13388E; --green:#34AF67; --blue:#3C79C5; --red:#DF3C3C;
+  --black:#000000; --white:#ffffff; --grey:#E9E8E8; --grey-text:#6b6b6b; --chip-off:#C4C4C4;
+
+  --font:"Prompt",system-ui,sans-serif;
+  --radius:20px;
+  --gap-x:16px;
+  --gap-y:32px;
+  --pad-x:min(5.85vw,84px);
+  --head-gap:clamp(24px,4.3vw,44px);
+
+  /* Light (ค่าเริ่มต้น) */
+  --page-bg:var(--grey);
+  --text:var(--black);
+  --muted:var(--grey-text);
+  --surface:var(--white);
+  --line:var(--grey);
+  --avatar-bg:var(--grey);
+  --ph-color:#9a9a9a;
+  --nav-bg:var(--blue);
+  --foot-bg:var(--blue);
+  --head-blue:var(--blue);
+  --search-bg:var(--white);
+  --chip-on:var(--blue);
+  --switch-line:var(--black);
+  --focus:var(--navy);
+  --hero-overlay:linear-gradient(transparent,transparent);
+  --hero-gradient:linear-gradient(#8fc7ff,#d9efff 55%,#bfe3b4);
+  color-scheme:light;
+}
+/* Dark */
+:root[data-theme="dark"]{
+  --page-bg:var(--black);
+  --text:var(--white);
+  --muted:var(--grey);
+  --surface:var(--navy);
+  --line:var(--indigo);
+  --avatar-bg:var(--indigo);
+  --ph-color:var(--grey);
+  --nav-bg:var(--navy);
+  --foot-bg:var(--navy);
+  --search-bg:var(--grey);
+  --chip-off:var(--black);
+  --switch-line:var(--white);
+  --focus:var(--white);
+  --hero-overlay:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3));
+  --hero-gradient:linear-gradient(var(--indigo),var(--navy) 50%,var(--black));
+  color-scheme:dark;
+}
+:root[data-theme="dark"] .card{box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+:root[data-theme="dark"] .row dd,
+:root[data-theme="dark"] .set .d,
+:root[data-theme="dark"] .contact .rel,
+:root[data-theme="dark"] .contact .tel{opacity:.8}
+:root[data-theme="dark"] .chip{border:1px solid var(--indigo)}
+
+/* ===== Base ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);color:var(--text);background:var(--page-bg);font-size:14px;line-height:1.4;min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.fa{height:1em;width:auto;fill:currentColor;display:block;flex:none}
+[hidden]{display:none!important}
+
+/* ===== Navbar ===== */
+.nav{background:var(--nav-bg);color:var(--white);position:sticky;top:0;z-index:20;overflow-x:clip}
+.nav-in{display:flex;align-items:center;gap:38px;max-width:1440px;margin:auto;padding:24px min(1vw,14px) 24px var(--pad-x)}
+.logo{width:50px;height:50px;border-radius:50%;background:var(--white);display:grid;place-items:center;overflow:hidden;flex:none}
+.logo img{width:100%;height:100%;object-fit:contain;padding:3px}
+.links{display:flex;gap:56px;list-style:none;font-weight:500;font-size:18px}
+.links a{color:var(--white);text-decoration:none;padding-bottom:4px;border-bottom:2px solid transparent}
+.links a[aria-current]{border-color:var(--white)}
+.search{display:flex;align-items:center;gap:12px;background:var(--search-bg);color:var(--grey-text);border-radius:999px;padding:10px 20px;flex:1 1 auto;max-width:480px;min-width:0}
+.search input{border:0;outline:0;background:none;font:inherit;font-size:15px;width:100%;color:var(--black);min-width:0}
+.nav-ico{display:flex;gap:10px;align-items:center;margin-left:auto}
+.circle{width:50px;height:50px;border-radius:50%;background:var(--white);color:var(--black);display:grid;place-items:center;font-size:22px}
+.circle[aria-label="โปรไฟล์"] .icon{fill:currentColor}
+.burger{display:none;color:var(--white);font-size:32px}
+/* เมนูมือถือ/แท็บเล็ต: แถบสีขาวใต้ navbar */
+.drawer{position:absolute;top:100%;right:0;z-index:30;width:clamp(240px,34vw,300px);padding:36px 0 40px;
+  background:var(--surface);color:var(--text);border-bottom:3px solid var(--head-blue);border-radius:0 0 20px 20px;
+  filter:drop-shadow(0 10px 12px rgba(19,56,142,.18));visibility:hidden}
+.drawer.open{visibility:visible}
+.drawer a{display:block;color:inherit;text-decoration:none;font-weight:600;font-size:18px;padding:14px 36px}
+.drawer a:hover,.drawer a:focus-visible{background:var(--line)}
+.drawer .m-only{display:none}
+
+/* ===== ปุ่มย้อนกลับ ===== */
+.sw-back{display:inline-flex;align-items:center;gap:8px;min-height:44px;min-width:44px;padding:0 18px;margin-top:24px;
+  border-radius:999px;background:var(--surface);color:var(--text);text-decoration:none;font-weight:600;font-size:15px;
+  box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.sw-back:hover{background:var(--line);color:var(--text)}
+.sw-back .icon{font-size:18px}
+.sw-back+h1{padding-top:20px}
+
+/* ===== Page ===== */
+.hero{flex:1;padding-bottom:50px;
+  background:var(--hero-overlay),url("../img/Bg-Desktop.PNG") center bottom/cover no-repeat,var(--hero-gradient)}
+.wrap{max-width:1440px;margin:auto;padding:0 var(--pad-x)}
+h1{font-size:24px;font-weight:500;padding:44px 0 32px}
+.card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 8px rgba(19,56,142,.12);display:flex;flex-direction:column}
+.card-head{display:flex;align-items:center;gap:var(--head-gap);padding:18px 20px;font-weight:600;font-size:16px}
+.card-head .icon{font-size:22px}
+.card-head.plain{border-bottom:1px solid var(--line);margin:0 6px;padding-left:10px}
+.card-head.blue{background:var(--head-blue);color:var(--white)}
+.card-body{padding:22px 24px 26px;flex:1}
+
+/* Profile */
+.profile{flex-direction:row;align-items:center;gap:28px;padding:19px 28px;margin-bottom:var(--gap-y)}
+.avatar{position:relative;width:96px;height:96px;border-radius:50%;background:var(--avatar-bg);flex:none}
+.avatar>img,.avatar>.ph{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.avatar>.ph{display:grid;place-items:center;color:var(--ph-color)}
+.avatar>.ph .icon{width:50%;height:50%}
+.avatar.lg{width:134px;height:134px}
+.avatar.sm{width:100px;height:100px}
+.cam{position:absolute;right:0;bottom:0;width:34px;height:34px;border-radius:50%;background:rgba(196,196,196,.95);color:var(--white);display:grid;place-items:center;font-size:17px}
+.cam:hover,.cam:focus-visible{background:#a9a9a9}
+/* รูปผู้ติดต่อฉุกเฉิน: ทั้งวงกลมคลิกเปลี่ยนรูปได้ (แสดงไอคอนตอน hover/focus) */
+.avatar.sm .cam{inset:0;width:100%;height:100%;font-size:26px;background:rgba(0,0,0,.35);opacity:0;transition:opacity .15s}
+.avatar.sm .cam:hover,.avatar.sm .cam:focus-visible{opacity:1}
+.p-info{display:grid;gap:12px}
+.edit .p-name{font-size:25px;font-weight:600}
+.edit .p-mail{font-size:19px}
+
+/* ปุ่มแก้ไข (ดินสอ) */
+.edit{display:inline-flex;align-items:center;gap:8px}
+.edit>button{display:inline-flex;font-size:16px;color:var(--text);padding:2px;border-radius:4px}
+.edit>button:hover{background:var(--line)}
+.field{font-family:inherit;font-size:inherit;font-weight:inherit;color:inherit;background:none;border:0;border-radius:4px;padding:0 3px;margin:0 -3px;min-width:3ch;max-width:100%;field-sizing:content}
+.edit input.field{width:auto}
+.field:focus{outline:2px solid var(--blue);background:var(--surface)}
+.field.invalid{outline:2px solid var(--red)}
+
+/* Grid */
+.grid-top,.grid-bot{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gap-x);row-gap:var(--gap-y)}
+.grid-top{margin-bottom:var(--gap-y)}
+
+/* Emergency contact */
+.contact{display:flex;align-items:center;gap:14px;margin:auto 0}
+.contact .name{font-weight:600;font-size:17px}
+.contact .rel,.contact .tel{color:var(--muted);font-size:14px}
+.contact .meta{display:grid;gap:3px}
+
+/* Personal info */
+.info{display:grid;gap:16px}
+.row{display:grid;grid-template-columns:30% 1fr;align-items:center;font-size:14px}
+.row dt{font-weight:600}
+.row dd{color:var(--muted)}
+
+/* Toggles */
+.settings{list-style:none;display:grid;gap:22px}
+.set{display:flex;align-items:center;gap:26px}
+.set>.icon{font-size:22px;width:24px}
+.set .txt{flex:1;display:grid}
+.set .t{font-weight:500;font-size:16px}
+.set .d{font-size:11px;color:var(--muted)}
+.switch{position:relative;width:38px;height:22px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0;z-index:1}
+.switch span{position:absolute;inset:0;border-radius:999px;background:var(--surface);border:2px solid var(--switch-line);transition:background .2s,border-color .2s}
+.switch span::after{content:"";position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:var(--switch-line);transition:transform .2s,background .2s}
+.switch input:checked+span{background:var(--green);border-color:var(--green)}
+.switch input:checked+span::after{transform:translateX(16px);background:var(--white)}
+.switch input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
+
+/* Preferences */
+.pref+.pref{margin-top:22px}
+.pref h3{font-size:16px;font-weight:500;margin-bottom:10px}
+.chips{--cg:clamp(8px,1.7vw,17px);display:flex;gap:var(--cg)}
+.chip{flex:0 0 calc((100% - 2*var(--cg))/3);padding:5px 4px;border-radius:999px;background:var(--chip-off);color:var(--white);font-size:12px;text-align:center;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--chip-on)}
+
+/* ===== Footer ===== */
+.foot{background:var(--foot-bg);color:var(--white);padding:52px 0 80px}
+.foot-in{max-width:1440px;margin:auto;padding:0 var(--pad-x);display:grid;grid-template-columns:44% 24% 1fr}
+.foot h4{font-size:20px;font-weight:500;margin-bottom:10px}
+.foot-in>div:first-child h4{font-size:26px}
+.foot p{font-size:14px;font-weight:300}
+.foot-in>div:first-child p{max-width:520px}
+.social{display:flex;gap:10px;flex-wrap:wrap}
+.social a{width:64px;height:64px;border-radius:50%;background:var(--white);color:var(--blue);display:grid;place-items:center;font-size:40px;line-height:1;text-decoration:none}
+
+/* ===== Laptop (≥1101px) ===== */
+@media (min-width:1101px){
+  .nav-in{padding-right:var(--pad-x)}
+  .links{gap:clamp(28px,3.9vw,56px)}
+  .links a{white-space:nowrap}
+  .search{flex:0 1 300px;max-width:none;margin-left:auto;padding:7px 22px}
+  .search .icon{width:22px;height:22px}
+  .search input{font-size:17px}
+  .search+.nav-ico{margin-left:-18px}
+  .drawer{display:none}
+}
+
+/* ===== Tablet (≤1100px) ===== */
+@media (max-width:1100px){
+  :root{--pad-x:7.5vw;--gap-x:30px}
+  .nav-in{gap:14px;padding:20px 7.9vw 20px 9.6vw}
+  .logo{width:64px;height:64px}
+  .links{display:none}
+  .burger{display:block}
+  .search{flex:1;max-width:none;padding:8px 18px}
+  .nav-ico{gap:16px;margin-left:12px}
+  .nav-ico .burger{margin-left:2px}
+  .hero{padding-bottom:63px;background:var(--hero-overlay),url("../img/Bg-Tablet.JPG") center bottom/cover no-repeat,var(--hero-gradient)}
+  h1{font-size:26px;padding:56px 0 48px 2.4vw}
+  .profile{padding:30px 40px;gap:44px}
+  .avatar.lg{width:146px;height:146px}
+  .avatar.sm{width:112px;height:112px}
+  .cam{width:36px;height:36px}
+  .edit .p-name{font-size:26px}
+  .grid-top{grid-template-columns:1fr}
+  .grid-bot{grid-template-columns:1.78fr 1fr}
+  .card-head.plain{margin:0 20px;padding-left:3px}
+  .card-head.blue{padding-left:26px}
+  .set .t{font-size:15px}
+  .foot{padding:56px 0 70px}
+  .foot-in{grid-template-columns:1fr 1fr 1.6fr;column-gap:20px}
+  .foot h4,.foot-in>div:first-child h4{font-size:18px}
+  .social{gap:6px}
+  .social a{width:52px;height:52px;font-size:32px}
+}
+
+/* ===== Mobile (≤599px) ===== */
+@media (max-width:599px){
+  :root{--pad-x:8.6vw;--gap-x:12px;--head-gap:28px}
+  body{font-size:13px}
+  .nav-in{gap:15px;padding:23px 11vw 23px 8.4vw}
+  .logo{width:46px;height:46px}
+  .search{padding:5px 12px;font-size:12px}
+  .search input{font-size:12px}
+  .nav-ico{margin-left:4px}
+  .nav-ico .circle{display:none}
+  .burger{font-size:30px}
+  .drawer{width:clamp(220px,62vw,280px);padding:16px 0 20px;border-radius:0 0 24px 24px}
+  .drawer a{font-size:15px;font-weight:500;padding:8px 20px}
+  .drawer .m-only{display:block}
+  .hero{padding-bottom:32px;background:var(--hero-overlay),url("../img/Bg-Mobile.JPG") center bottom/cover no-repeat,var(--hero-gradient)}
+  h1{padding:58px 0 50px}
+  .card-body{padding:14px 16px 18px}
+  .profile{padding:20px 22px;gap:16px}
+  .avatar.lg{width:90px;height:90px}
+  .avatar.sm{width:76px;height:76px}
+  .cam{width:28px;height:28px;font-size:14px}
+  .edit .p-name{font-size:16px}
+  .edit .p-mail{font-size:12px}
+  .edit>button{font-size:13px}
+  .grid-bot{grid-template-columns:1fr}
+  .card-head{font-size:13px;padding:16px}
+  .card-head.plain{margin:0 9px;padding-left:10px}
+  .card-head.blue{padding-left:18px}
+  .row{font-size:12px}
+  .contact .name{font-size:14px}
+  .contact .rel,.contact .tel{font-size:12px}
+  .set{gap:22px}
+  .set .t{font-size:13px}
+  .set .d{font-size:10px}
+  .pref h3{font-size:13px}
+  .foot{padding:36px 0 44px}
+  /* footer เรียงแนวนอน: About us เต็มแถวบน, Contact + Follow อยู่แถวเดียวกัน */
+  .foot-in{grid-template-columns:1fr 1fr;column-gap:16px;row-gap:18px}
+  .foot-in>div:first-child{grid-column:1 / -1}
+  .foot h4,.foot-in>div:first-child h4{font-size:16px}
+  .foot p{font-size:12px}
+  .social a{width:40px;height:40px;font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- SVG icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 1 1 12 0v6l2 2H4z"/><path d="M10 21h4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 4v16l17-8z"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="2"/><path d="m9 21 2-6-2-3 2-5 4 3 3 1M11 15l4 2 1 4M8 12l-3 3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v5M12 17.5v.5"/></symbol>
+  <symbol id="i-finger" viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 12 0M8 20c1-2 1-4 1-6a3 3 0 0 1 6 0c0 3 0 5 1.5 7M12 14c0 3-.5 5-2 7M4 14c0-1 .2-2 .5-3"/></symbol>
+  <symbol id="i-sos" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></symbol>
+</svg>
+
+<!-- ===== Navbar ===== -->
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="home.html" aria-label="SafeWay">
+  <img src="../img/logo.png" alt="SafeWay">
+</a>
+    <nav aria-label="เมนูหลัก">
+      <ul class="links">
+        <li><a href="home.html" aria-current="page">Home</a></li>
+        <li><a href="map.html">Map</a></li>
+        <li><a href="savedplace.html">Saved Places</a></li>
+        <li><a href="people.html">People</a></li>
+      </ul>
+    </nav>
+    <label class="search">
+      <svg class="icon"><use href="#i-search"/></svg>
+      <input type="search" placeholder="ค้นหาสถานที่" aria-label="ค้นหาเส้นทาง">
+    </label>
+    <div class="nav-ico">
+      <button type="button" class="circle" aria-label="โปรไฟล์"><svg class="icon"><use href="#i-user"/></svg></button>
+      <button type="button" class="circle" aria-label="การแจ้งเตือน"><svg class="icon"><use href="#i-bell"/></svg></button>
+      <button type="button" class="burger" id="burger" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="drawer"><svg class="icon"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+  <nav class="drawer" id="drawer" aria-label="เมนูมือถือ">
+    <a href="home.html">Home</a>
+    <a href="map.html">Map</a>
+    <a href="savedplace.html">Saved Places</a>
+    <a href="people.html">People</a>
+    <a href="setting.html" class="m-only">Profile &amp; Settings</a>
+    <a href="#" class="m-only">New Message</a>
+  </nav>
+</header>
+
+<main class="hero">
+  <div class="wrap">
+    <a href="home.html" class="sw-back" aria-label="กลับหน้าหลัก">
+      <svg class="icon" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg><span>Back</span>
+    </a>
+    <h1>Profile &amp; Settings</h1>
+
+    <!-- Profile -->
+    <section class="card profile" aria-label="โปรไฟล์">
+      <div class="avatar lg" data-avatar="profile">
+        <div class="ph"><svg class="icon"><use href="#i-user"/></svg></div>
+        <img alt="รูปโปรไฟล์" hidden>
+        <button type="button" class="cam" aria-label="เปลี่ยนรูปโปรไฟล์"><svg class="icon"><use href="#i-camera"/></svg></button>
+        <input type="file" accept="image/*" hidden>
+      </div>
+      <div class="p-info">
+        <div class="edit"><span class="p-name">Nana Komatsu</span><button type="button" aria-label="แก้ไขชื่อ"><svg class="icon"><use href="#i-pencil"/></svg></button></div>
+        <div class="edit"><span class="p-mail">NanaKomatsu@gmail.com</span><button type="button" aria-label="แก้ไขอีเมล"><svg class="icon"><use href="#i-pencil"/></svg></button></div>
+      </div>
+    </section>
+
+    <!-- Emergency + Personal -->
+    <div class="grid-top">
+      <section class="card" aria-labelledby="h-emg">
+        <h2 class="card-head plain" id="h-emg"><svg class="icon"><use href="#i-shield"/></svg>Emergency Contacts</h2>
+        <div class="card-body">
+          <div class="contact">
+            <div class="avatar sm" data-avatar="contact1">
+              <div class="ph"><svg class="icon"><use href="#i-user"/></svg></div>
+              <img alt="รูปผู้ติดต่อฉุกเฉิน" hidden>
+              <button type="button" class="cam" aria-label="เปลี่ยนรูปผู้ติดต่อ"><svg class="icon"><use href="#i-camera"/></svg></button>
+              <input type="file" accept="image/*" hidden>
+            </div>
+            <div class="meta">
+              <div class="edit"><span class="name">Nami Komatsu</span><button type="button" aria-label="แก้ไขชื่อ"><svg class="icon"><use href="#i-pencil"/></svg></button></div>
+              <div class="edit"><span class="rel">Family</span><button type="button" aria-label="แก้ไขความสัมพันธ์"><svg class="icon"><use href="#i-pencil"/></svg></button></div>
+              <span class="tel">(+66) 66 666 6666</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-per">
+        <h2 class="card-head plain" id="h-per"><svg class="icon"><use href="#i-user"/></svg>Personal Information</h2>
+        <div class="card-body">
+          <dl class="info">
+            <div class="row"><dt>Name</dt><dd class="edit"><span>Silpakorn Student</span><button type="button" aria-label="แก้ไข Name"><svg class="icon"><use href="#i-pencil"/></svg></button></dd></div>
+            <div class="row"><dt>Email</dt><dd class="edit"><span>silpakorn.student@safeway.com</span><button type="button" aria-label="แก้ไข Email"><svg class="icon"><use href="#i-pencil"/></svg></button></dd></div>
+            <div class="row"><dt>Phone</dt><dd class="edit"><span>(+66) 66 666 6666</span><button type="button" aria-label="แก้ไข Phone"><svg class="icon"><use href="#i-pencil"/></svg></button></dd></div>
+            <div class="row"><dt>Birthday</dt><dd class="edit"><span>21 May 1929</span><button type="button" aria-label="แก้ไข Birthday"><svg class="icon"><use href="#i-pencil"/></svg></button></dd></div>
+          </dl>
+        </div>
+      </section>
+    </div>
+
+    <!-- Security + Preferences -->
+    <div class="grid-bot">
+      <section class="card" aria-labelledby="h-sec">
+        <h2 class="card-head blue" id="h-sec"><svg class="icon"><use href="#i-shield"/></svg>Security &amp; Safety Settings</h2>
+        <div class="card-body">
+          <ul class="settings">
+            <li class="set"><svg class="icon"><use href="#i-send"/></svg><div class="txt"><span class="t">Live Location Sharing</span><span class="d">Shares live location with contacts.</span></div>
+              <label class="switch"><input type="checkbox" aria-label="Live Location Sharing"><span></span></label></li>
+            <li class="set"><svg class="icon"><use href="#i-walk"/></svg><div class="txt"><span class="t">Solo Travel Mode</span><span class="d">Notifies contacts on solo trips.</span></div>
+              <label class="switch"><input type="checkbox" aria-label="Solo Travel Mode"><span></span></label></li>
+            <li class="set"><svg class="icon"><use href="#i-alert"/></svg><div class="txt"><span class="t">Risk Area Alerts</span><span class="d">Alerts when entering high-risk zones.</span></div>
+              <label class="switch"><input type="checkbox" aria-label="Risk Area Alerts"><span></span></label></li>
+            <li class="set"><svg class="icon"><use href="#i-finger"/></svg><div class="txt"><span class="t">Biometric Login</span><span class="d">Use Touch ID or Face ID for quick access.</span></div>
+              <label class="switch"><input type="checkbox" aria-label="Biometric Login"><span></span></label></li>
+            <li class="set"><svg class="icon"><use href="#i-sos"/></svg><div class="txt"><span class="t">Emergency SOS Auto-Dial</span><span class="d">Auto-dials emergency services on SOS.</span></div>
+              <label class="switch"><input type="checkbox" aria-label="Emergency SOS Auto-Dial"><span></span></label></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-app">
+        <h2 class="card-head blue" id="h-app"><svg class="icon"><use href="#i-gear"/></svg>App Preferences</h2>
+        <div class="card-body">
+          <div class="pref"><h3>Map Type</h3>
+            <div class="chips" role="group" aria-label="Map Type">
+              <button type="button" class="chip" aria-pressed="true">Default</button><button type="button" class="chip" aria-pressed="false">Satellite</button><button type="button" class="chip" aria-pressed="false">Hybrid</button>
+            </div></div>
+          <div class="pref"><h3>Theme</h3>
+            <div class="chips" role="group" aria-label="Theme">
+              <button type="button" class="chip" data-theme-value="light" aria-pressed="true">Light</button><button type="button" class="chip" data-theme-value="dark" aria-pressed="false">Dark</button>
+            </div></div>
+          <div class="pref"><h3>Display Units</h3>
+            <div class="chips" role="group" aria-label="Display Units">
+              <button type="button" class="chip" aria-pressed="true">Kilometers</button><button type="button" class="chip" aria-pressed="false">Miles</button>
+            </div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="foot">
+  <div class="foot-in">
+    <div><h4>About us</h4><p>Smart route planning and personal safety web app designed to keep your everyday journey secure and worry-free.</p></div>
+    <div><h4>Contact Us</h4><p>Email : safeway@gmail.com<br>Tel : 012-345-6789</p></div>
+    <div><h4>Follow Us</h4>
+      <div class="social">
+        <!-- ไอคอน Font Awesome ฝังเป็น SVG ในไฟล์ (ไม่ต้องโหลดจากเน็ต) ใส่ลิงก์จริงที่ href ได้เลย -->
+        <a href="#" aria-label="Facebook"><svg class="fa" viewBox="0 0 448 512" aria-hidden="true"><path d="M64 32C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h98.2V334.2h-52.8V256h52.8v-33.7c0-87.1 39.4-127.5 125-127.5 16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H255V480h129c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg class="fa" viewBox="0 0 448 512" aria-hidden="true"><path d="M224.3 141a115 115 0 1 0-.6 230 115 115 0 1 0 .6-230m-.6 40.4a74.6 74.6 0 1 1 .6 149.2 74.6 74.6 0 1 1-.6-149.2m93.4-45.1a26.8 26.8 0 1 1 53.6 0 26.8 26.8 0 1 1-53.6 0m129.7 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8M399 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1"/></svg></a>
+        <a href="#" aria-label="LINE"><svg class="fa" viewBox="0 0 512 512" aria-hidden="true"><path d="M311 196.8v81.3c0 2.1-1.6 3.7-3.7 3.7h-13c-1.3 0-2.4-.7-3-1.5L254 230v48.2c0 2.1-1.6 3.7-3.7 3.7h-13c-2.1 0-3.7-1.6-3.7-3.7v-81.3c0-2.1 1.6-3.7 3.7-3.7h12.9c1.1 0 2.4.6 3 1.6l37.3 50.3v-48.2c0-2.1 1.6-3.7 3.7-3.7h13c2.1-.1 3.8 1.6 3.8 3.5zm-93.7-3.7h-13c-2.1 0-3.7 1.6-3.7 3.7v81.3c0 2.1 1.6 3.7 3.7 3.7h13c2.1 0 3.7-1.6 3.7-3.7v-81.3c0-1.9-1.6-3.7-3.7-3.7m-31.4 68.1h-35.6v-64.4c0-2.1-1.6-3.7-3.7-3.7h-13c-2.1 0-3.7 1.6-3.7 3.7v81.3c0 1 .3 1.8 1 2.5.7.6 1.5 1 2.5 1h52.2c2.1 0 3.7-1.6 3.7-3.7v-13c0-1.9-1.6-3.7-3.5-3.7zm193.7-68.1h-52.3c-1.9 0-3.7 1.6-3.7 3.7v81.3c0 1.9 1.6 3.7 3.7 3.7h52.2c2.1 0 3.7-1.6 3.7-3.7V265c0-2.1-1.6-3.7-3.7-3.7H344v-13.6h35.5c2.1 0 3.7-1.6 3.7-3.7v-13.1c0-2.1-1.6-3.7-3.7-3.7H344v-13.7h35.5c2.1 0 3.7-1.6 3.7-3.7v-13c-.1-1.9-1.7-3.7-3.7-3.7zM512 93.4v326c-.1 51.2-42.1 92.7-93.4 92.6h-326C41.4 511.9-.1 469.8 0 418.6v-326C.1 41.4 42.2-.1 93.4 0h326c51.2.1 92.7 42.1 92.6 93.4m-70.4 140.1c0-83.4-83.7-151.3-186.4-151.3S68.8 150.1 68.8 233.5c0 74.7 66.3 137.4 155.9 149.3 21.8 4.7 19.3 12.7 14.4 42.1-.8 4.7-3.8 18.4 16.1 10.1s107.3-63.2 146.5-108.2c27-29.7 39.9-59.8 39.9-93.1z"/></svg></a>
+        <a href="#" aria-label="TikTok"><svg class="fa" viewBox="0 0 448 512" aria-hidden="true"><path d="M448.5 209.9c-44 .1-87-13.6-122.8-39.2v178.7c0 33.1-10.1 65.4-29 92.6s-45.6 48-76.6 59.6-64.8 13.5-96.9 5.3-60.9-25.9-82.7-50.8-35.3-56-39-88.9 2.9-66.1 18.6-95.2 40-52.7 69.6-67.7 62.9-20.5 95.7-16v89.9c-15-4.7-31.1-4.6-46 .4s-27.9 14.6-37 27.3-14 28.1-13.9 43.9 5.2 31 14.5 43.7 22.4 22.1 37.4 26.9 31.1 4.8 46-.1 28-14.4 37.2-27.1 14.2-28.1 14.2-43.8V0h88c-.1 7.4.6 14.9 1.9 22.2 3.1 16.3 9.4 31.9 18.7 45.7s21.3 25.6 35.2 34.6c19.9 13.1 43.2 20.1 67 20.1V210z"/></svg></a>
+        <a href="#" aria-label="X"><svg class="fa" viewBox="0 0 448 512" aria-hidden="true"><path d="M357.2 48h70.6L273.6 224.2 455 464H313L201.7 318.6 74.5 464H3.8l164.9-188.5L-5.2 48h145.6l100.5 132.9zm-24.8 373.8h39.1L119.1 88h-42z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var KEY = 'safeway-profile-v1';
+  var store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+
+  /* ---------- 1) แก้ไขข้อความ (ปุ่มดินสอ) ---------- */
+  document.querySelectorAll('.edit').forEach(function (box, i) {
+    var id = 'edit' + i;
+    var btn = box.querySelector('button');
+    var span = box.querySelector('span');
+    if (!btn || !span) return;
+    if (store[id]) span.textContent = store[id];
+
+    function isEmail(el) {
+      var row = box.closest('.row');
+      return el.classList.contains('p-mail') ||
+        (row && /email/i.test(row.querySelector('dt').textContent));
+    }
+
+    btn.addEventListener('click', function () {
+      var current = box.querySelector('span');
+      if (!current) return; // กำลังแก้อยู่แล้ว
+      var input = document.createElement('input');
+      input.className = 'field ' + current.className;
+      input.type = isEmail(current) ? 'email' : 'text';
+      input.value = current.textContent;
+      input.setAttribute('aria-label', btn.getAttribute('aria-label') || 'แก้ไข');
+      function size() { input.style.width = Math.max(input.value.length + 1, 4) + 'ch'; }
+      size();
+      input.addEventListener('input', function () { input.classList.remove('invalid'); size(); });
+      box.replaceChild(input, current);
+      input.focus(); input.select();
+
+      var done = false;
+      function finish(commit) {
+        if (done) return;
+        var val = input.value.trim();
+        if (commit && val && input.type === 'email' && !input.checkValidity()) {
+          input.classList.add('invalid'); input.focus(); return; // อีเมลไม่ถูกต้อง
+        }
+        done = true;
+        var s = document.createElement('span');
+        s.className = current.className;
+        s.textContent = (commit && val) ? val : current.textContent;
+        if (commit && val) { store[id] = val; save(); }
+        if (input.parentNode === box) box.replaceChild(s, input);
+        btn.focus();
+      }
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+        if (e.key === 'Escape') { finish(false); }
+      });
+      input.addEventListener('blur', function () { finish(true); });
+    });
+  });
+
+  /* ---------- 2) เปลี่ยนรูปโปรไฟล์ ---------- */
+  document.querySelectorAll('.avatar[data-avatar]').forEach(function (av) {
+    var key = 'avatar:' + av.dataset.avatar;
+    var img = av.querySelector('img');
+    var ph = av.querySelector('.ph');
+    var cam = av.querySelector('.cam');
+    var file = av.querySelector('input[type=file]');
+
+    function show(src) { img.src = src; img.hidden = false; if (ph) ph.hidden = true; }
+    if (store[key]) show(store[key]);
+
+    cam.addEventListener('click', function () { file.click(); });
+    file.addEventListener('change', function () {
+      var f = file.files[0];
+      if (!f || !/^image\//.test(f.type)) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        var im = new Image();
+        im.onload = function () {
+          // ย่อรูปให้ไม่เกิน 256px เพื่อเก็บใน localStorage ได้
+          var r = Math.min(1, 256 / Math.max(im.width, im.height));
+          var c = document.createElement('canvas');
+          c.width = Math.round(im.width * r); c.height = Math.round(im.height * r);
+          c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+          var data = c.toDataURL('image/jpeg', 0.85);
+          show(data);
+          store[key] = data; save();
+        };
+        im.src = reader.result;
+      };
+      reader.readAsDataURL(f);
+      file.value = '';
+    });
+  });
+
+  /* ---------- 3) Toggle สวิตช์ ---------- */
+  document.querySelectorAll('.switch input').forEach(function (cb) {
+    var k = 'sw:' + cb.getAttribute('aria-label');
+    if (store[k]) cb.checked = true;
+    cb.addEventListener('change', function () { store[k] = cb.checked; save(); });
+  });
+
+  /* ---------- 4) Chip (Map type / Theme / Units) ---------- */
+  document.querySelectorAll('.chips').forEach(function (group) {
+    var k = 'chip:' + group.getAttribute('aria-label');
+    var chips = group.querySelectorAll('.chip');
+    function select(chip) {
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+    }
+    if (store[k]) chips.forEach(function (c) { if (c.textContent.trim() === store[k]) select(c); });
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () {
+        select(c);
+        store[k] = c.textContent.trim(); save();
+        if (c.dataset.themeValue) {
+          document.documentElement.dataset.theme = c.dataset.themeValue;
+          try { localStorage.setItem('safeway-theme', c.dataset.themeValue); } catch (e) {}
+        }
+      });
+    });
+  });
+  // sync ปุ่มธีมกับค่าที่บันทึกไว้
+  var theme = document.documentElement.dataset.theme;
+  if (theme) document.querySelectorAll('[data-theme-value]').forEach(function (c) {
+    c.setAttribute('aria-pressed', c.dataset.themeValue === theme ? 'true' : 'false');
+  });
+
+  /* ---------- 5) เมนูมือถือ ---------- */
+  var burger = document.getElementById('burger');
+  var drawer = document.getElementById('drawer');
+  function setMenu(open) {
+    drawer.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  burger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    setMenu(!drawer.classList.contains('open'));
+  });
+  // คลิกนอกเมนู หรือคลิกลิงก์ในเมนู → ปิด
+  document.addEventListener('click', function (e) {
+    if (!drawer.contains(e.target) || e.target.closest('a')) setMenu(false);
+  });
+  // กด Esc → ปิดและคืนโฟกัสให้ปุ่ม
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) { setMenu(false); burger.focus(); }
+  });
+  // ขยายหน้าจอเป็น laptop → ปิดเมนู
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 1100) setMenu(false);
+  });
+})();
+</script>
+</body>
+</html>

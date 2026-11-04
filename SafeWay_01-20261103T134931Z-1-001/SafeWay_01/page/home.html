@@ -1,0 +1,1898 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeWay - Walk Home Safe</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* =====================================================================
+       SafeWay – Header + Footer (ชุดเดียวกับทุกหน้า)
+       ===================================================================== */
+    :root{
+      --indigo:#3949B2; --navy:#13388E; --green:#34AF67; --blue:#3C79C5;
+      --red:#DF3C3C; --black:#000000; --white:#ffffff; --grey:#E9E8E8;
+      --grey-text:#6b6b6b; --font:"Prompt","Kanit",system-ui,sans-serif;
+      --pad-x:84px; --text:var(--black); --surface:var(--white);
+      --line:var(--grey); --nav-bg:var(--blue); --foot-bg:var(--blue);
+      --head-blue:var(--blue); --search-bg:var(--white); --focus:var(--navy);
+    }
+    .nav,.nav *,.foot,.foot *{margin:0;padding:0;box-sizing:border-box}
+    .nav,.foot{font-family:var(--font);font-size:14px;line-height:1.4}
+    .nav :focus-visible,.foot :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+    .icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+    .nav{display:block;flex-wrap:nowrap;background:var(--nav-bg);color:var(--white);position:sticky;top:0;z-index:1030;overflow-x:clip}
+    .nav-in{display:flex;align-items:center;gap:38px;max-width:1440px;margin:auto;padding:24px min(1vw,14px) 24px var(--pad-x)}
+    .logo{width:50px;height:50px;border-radius:50%;background:var(--white);display:grid;place-items:center;overflow:hidden;flex:none}
+    .logo img{width:100%;height:100%;object-fit:contain;padding:3px}
+    .links{display:flex;gap:56px;list-style:none;font-weight:500;font-size:18px}
+    .links a{color:var(--white);text-decoration:none;padding-bottom:4px;border-bottom:2px solid transparent}
+    .links a[aria-current]{border-color:var(--white)}
+    .search{display:flex;align-items:center;gap:12px;background:var(--search-bg);color:var(--grey-text);border-radius:999px;padding:10px 20px;flex:1 1 auto;max-width:480px;min-width:0}
+    .search input{border:0;outline:0;background:none;font:inherit;font-size:15px;width:100%;color:var(--black);min-width:0;box-shadow:none}
+    .nav-ico{display:flex;gap:10px;align-items:center;margin-left:auto}
+    .search+.nav-ico{margin-left:auto}
+    @media (min-width:1101px){
+      .nav-in{padding-right:var(--pad-x)}
+      .links{gap:clamp(28px,3.9vw,56px)}
+      .links a{white-space:nowrap}
+      .search{flex:0 1 300px;max-width:none;margin-left:auto;padding:7px 22px;gap:12px}
+      .search .icon{width:22px;height:22px}
+      .search input{font-size:17px}
+      .search+.nav-ico{margin-left:-18px}
+    }
+    .circle{width:50px;height:50px;border-radius:50%;background:var(--white);color:var(--black);display:grid;place-items:center;font-size:22px;text-decoration:none;position:relative}
+    .circle:hover{color:var(--black)}
+    .circle[aria-label="โปรไฟล์"] .icon{fill:currentColor}
+    .burger{display:none;background:none;border:0;color:var(--white);font-size:32px;cursor:pointer}
+
+    .drawer{display:block;position:absolute;top:100%;right:0;z-index:30;width:clamp(240px,34vw,300px);overflow:hidden;
+      filter:drop-shadow(0 10px 12px rgba(19,56,142,.18));visibility:hidden;transition:visibility 0s linear .28s}
+    .drawer.open{visibility:visible;transition:visibility 0s}
+    .drawer-in{padding:36px 0 40px;background:var(--surface);color:var(--text);border-bottom:3px solid var(--head-blue);border-radius:0 0 20px 20px;
+      transform:translateY(-100%);transition:transform .28s ease}
+    .drawer.open .drawer-in{transform:translateY(0)}
+    .drawer a{display:block;color:inherit;text-decoration:none;font-weight:600;font-size:18px;padding:14px 36px}
+    .drawer a:hover,.drawer a:focus-visible{background:var(--line);color:inherit}
+    .drawer .m-only{display:none}
+    @media (min-width:1101px){.drawer{display:none!important}}
+
+    .foot{background:var(--foot-bg);color:var(--white);padding:52px 0 80px}
+    .foot-in{max-width:1440px;margin:auto;padding:0 var(--pad-x);display:grid;grid-template-columns:44% 24% 1fr;column-gap:0}
+    .foot h4{font-size:20px;font-weight:500;margin-bottom:10px;line-height:1.4}
+    .foot-in>div:first-child h4{font-size:26px}
+    .foot p{font-size:14px;font-weight:300}
+    .foot-in>div:first-child p{max-width:520px}
+    .social{display:flex;gap:10px;flex-wrap:wrap}
+    .social a{width:64px;height:64px;border-radius:50%;background:var(--white);color:var(--blue);display:grid;place-items:center;font-size:40px;line-height:1;text-decoration:none}
+
+    @media (max-width:1100px){
+      :root{--pad-x:64px}
+      .nav-in{gap:14px;padding:20px var(--pad-x)}
+      .logo{width:64px;height:64px}
+      .links{display:none}
+      .burger{display:block}
+      .search{flex:1;max-width:none;padding:8px 18px}
+      .nav-ico{gap:16px;margin-left:12px}
+      .nav-ico .burger{margin-left:2px}
+      .foot{padding:56px 0 70px}
+      .foot-in{grid-template-columns:1fr 1fr 1.6fr;column-gap:20px}
+      .foot-in>div:first-child h4,.foot h4{font-size:18px}
+      .social a{width:52px;height:52px;font-size:32px}
+      .social{gap:6px}
+    }
+    @media (max-width:599px){
+      :root{--pad-x:34px}
+      .nav-in{gap:15px;padding:23px var(--pad-x)}
+      .logo{width:46px;height:46px}
+      .search{padding:5px 12px;font-size:12px}
+      .search input{font-size:12px}
+      .nav-ico{margin-left:4px}
+      .burger{font-size:30px}
+      .drawer{width:clamp(220px,62vw,280px)}
+      .drawer-in{padding:16px 0 20px;border-radius:0 0 24px 24px}
+      .drawer a{font-size:15px;font-weight:500;padding:12px 24px;cursor:pointer}
+      .drawer .m-only{display:block}
+      .foot{padding:36px 0 44px}
+      .foot-in{grid-template-columns:1fr;row-gap:18px}
+      .foot-in>div:first-child h4,.foot h4{font-size:16px}
+      .foot p{font-size:12px}
+      .social a{width:56px;height:56px;font-size:34px}
+    }
+    @media (prefers-reduced-motion:reduce){.nav *{transition:none!important}}
+
+    /* แจ้งเตือน */
+    .noti-circle::after{display:none !important}
+    .noti-dot{position:absolute;top:12px;right:12px;width:11px;height:11px;background-color:var(--red);border-radius:50%;border:2px solid var(--white)}
+    .noti-menu{width:320px;border-radius:20px;margin-top:15px !important}
+    .noti-dot-mobile{position:absolute;top:18px;left:155px;width:8px;height:8px;background-color:var(--red);border-radius:50%}
+
+    /* =====================================================================
+       Header: ปุ่มโปรไฟล์ + ปุ่มแจ้งเตือน (กดได้ทุกขนาดจอ / Touch target ≥ 44px)
+       ===================================================================== */
+    .circle,.burger{flex:none;min-width:44px;min-height:44px}
+    .burger .icon{display:block;margin:auto}
+    .nav-ico{flex:none}
+    .profile-circle::after{display:none !important}
+    .noti-menu{width:min(320px,calc(100vw - 24px))}
+    .nav .profile-menu{min-width:220px;border-radius:20px;margin-top:15px !important;padding:8px 0}
+    .nav .profile-menu .dropdown-item{display:flex;align-items:center;gap:12px;min-height:44px;padding:12px 24px;font-size:1rem;font-weight:500;color:#000;background:none}
+    .nav .profile-menu .dropdown-item:hover,
+    .nav .profile-menu .dropdown-item:focus-visible{background:var(--line);color:#000}
+    @media (max-width:599px){
+      .nav-in{gap:8px;padding:23px 14px}
+      .nav-ico{gap:4px}
+      .circle{width:44px;height:44px}
+      .search{gap:6px;padding:5px 10px}
+      .noti-dot{top:9px;right:9px}
+      /* มือถือ: ซ่อนไอคอนโปรไฟล์ + กระดิ่ง (เข้าถึงได้จากเมนูแฮมเบอร์เกอร์แทน) */
+      .nav .nav-ico .profile-dropdown,
+      .nav .nav-ico .noti-desktop{display:none !important}
+      /* เมนู Noti / โปรไฟล์ บนมือถือ: ยึดกับขอบจอ ไม่ล้นออกนอกหน้าจอ */
+      .nav .noti-menu,.nav .profile-menu{position:fixed !important;margin-top:0 !important;transform:none !important}
+      .nav .noti-menu{inset:84px 14px auto 14px !important;width:auto !important}
+      .nav .profile-menu{inset:84px 14px auto auto !important;width:220px}
+    }
+
+    /* =====================================================================
+       ส่วนของหน้า Home
+       ===================================================================== */
+    :root {
+      --safeway-blue: #3b82f6;
+      --safeway-light-bg: #e2eeff;
+      --safeway-card-bg: #ffffff;
+      --safeway-text-main: #000000;
+      --safeway-sos-bg: #fca5a5;
+      --safeway-checkin-bg: #bbf7d0;
+      --bs-body-color: #000000;
+      --bs-body-color-rgb: 0, 0, 0;
+    }
+
+    * { font-family: 'Prompt', 'Kanit', sans-serif; box-sizing: border-box; }
+
+    body.safeway-home-bg {
+      background-color: #d8e8fa;
+      background-image: url('../img/Bg-Desktop.PNG');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      color: var(--safeway-text-main);
+    }
+
+    /* ให้ขอบเนื้อหาตรงกับ Header */
+    .safeway-main-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding-left: var(--pad-x);
+      padding-right: var(--pad-x);
+    }
+
+    body.sos-active { animation: sosFlash 0.8s infinite alternate; }
+    @keyframes sosFlash {
+      0% { background-color: #fee2e2; }
+      100% { background-color: #fca5a5; }
+    }
+
+    .fs-7 { font-size: 0.85rem; }
+    .fs-8 { font-size: 0.75rem; }
+
+    /* Hero */
+    .hero-title { font-family: 'Kanit', 'Prompt', sans-serif; font-size: 1.65rem !important; letter-spacing: -0.2px; }
+    .hero-subtitle { font-family: 'Prompt', 'Kanit', sans-serif; font-size: 0.92rem; line-height: 1.5; color: #000000 !important; }
+
+    /* Map */
+    .safeway-map-wrapper { height: 480px; width: 100%; border-radius: 24px !important; background-color: #e2e8f0; overflow: hidden; position: relative; z-index: 1; isolation: isolate; }
+    .clean-zoomed-map { width: 180% !important; height: 180% !important; margin-top: -30%; margin-left: -40%; pointer-events: auto; }
+    .map-overlay-bottom-left { position: absolute; bottom: 16px; left: 16px; z-index: 20; }
+    .map-overlay-bottom-right { position: absolute; bottom: 16px; right: 16px; z-index: 20; }
+
+    .map-sos-overlay-card {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100;
+      width: 85%; max-width: 420px; background-color: #fecaca; border: 2px solid #fca5a5;
+      border-radius: 28px; padding: 1.5rem; box-shadow: 0 12px 30px rgba(220, 38, 38, 0.25);
+      text-align: center; display: none; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .map-sos-overlay-card.active { display: block; }
+    .map-checkin-overlay-card {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100;
+      width: 85%; max-width: 420px; background-color: #d1fae5; border: 2px solid #86efac;
+      border-radius: 28px; padding: 1.5rem; box-shadow: 0 12px 30px rgba(16, 185, 129, 0.2);
+      text-align: center; display: none; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .map-checkin-overlay-card.active { display: block; }
+    @keyframes popIn {
+      0% { opacity: 0; transform: translate(-50%, -45%) scale(0.9); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .sos-badge-pill {
+      background-color: #ef4444; color: white; border-radius: 50px; padding: 6px 20px;
+      display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem;
+      margin-bottom: 12px; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+    }
+    .btn-cancel-safe {
+      background-color: #18181b; color: #ffffff; border: none; border-radius: 30px;
+      padding: 8px 24px; font-weight: 600; font-size: 0.95rem; transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .btn-cancel-safe:hover { background-color: #27272a; color: #ffffff; transform: translateY(-1px); }
+
+    .material-symbols-outlined { vertical-align: middle; font-size: 22px; line-height: 1; }
+
+    .btn-checkin { background-color: var(--safeway-checkin-bg) !important; color: #14532d !important; border: 1px solid #86efac !important; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important; }
+    .btn-checkin:hover { background-color: #86efac !important; }
+    .btn-sos { background-color: var(--safeway-sos-bg) !important; color: #7f1d1d !important; border: 1px solid #fca5a5 !important; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important; }
+    .btn-sos:hover { background-color: #f87171 !important; color: #ffffff !important; }
+    .btn-sos:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-map-control {
+      background-color: #ffffff !important; color: #000000 !important; width: 42px; height: 42px;
+      border-radius: 50% !important; display: flex; align-items: center; justify-content: center;
+      border: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    #fullMapModal .modal-fullscreen { width: 100vw; height: 100vh; }
+    #fullMapModal iframe { pointer-events: auto !important; }
+    .full-modal-map-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
+    .full-modal-map-container iframe { width: 130% !important; height: 130% !important; margin-top: -15%; margin-left: -15%; }
+
+    /* Panels */
+    .safeway-card-panel { border-radius: 24px !important; border: 1px solid rgba(255, 255, 255, 0.8); }
+    @media (min-width: 992px) { .plan-route-panel { height: 480px !important; } }
+    .panel-title { font-family: 'Kanit', 'Prompt', sans-serif; font-size: 1.4rem; }
+
+    .route-input-group .route-input {
+      border-radius: 18px !important; background-color: #f1f5f9 !important; border: 1px solid #e2e8f0 !important;
+      padding-left: 80px !important; font-size: 0.95rem; height: 50px; font-weight: 500; color: #000000;
+    }
+    .route-input-group .route-input:focus { background-color: #ffffff !important; border-color: var(--safeway-blue) !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important; }
+    .route-item-box {
+      border-radius: 18px !important; background-color: #f1f5f9 !important; border: 1px solid #e2e8f0 !important;
+      height: 50px; padding: 0 1.2rem; display: flex; align-items: center; gap: 0.85rem;
+      font-size: 0.95rem; font-weight: 500; color: #000000; width: 100%;
+    }
+    .btn-find-route { background-color: #3b82f6 !important; font-size: 1rem; letter-spacing: 0.3px; border: none; transition: all 0.2s ease; height: 50px; }
+    .btn-find-route:hover { background-color: #2563eb !important; transform: translateY(-1px); }
+    .route-summary-box { background-color: transparent; border: none; cursor: pointer; }
+
+    /* Saved Places */
+    .btn-add-circle { background-color: #000000 !important; color: #ffffff !important; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: none; font-size: 0.85rem; }
+    .saved-places-auto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); width: 100%; }
+    .saved-place-card { width: 100%; min-height: 195px; background-color: #f8fafc; border-color: #e2e8f0 !important; cursor: pointer; transition: all 0.2s ease; overflow: hidden; }
+    .saved-place-card:hover { background-color: #ffffff; border-color: #3b82f6 !important; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+    .place-card-top { flex-grow: 1; }
+    .place-card-title { font-size: 1.05rem; line-height: 1.25; }
+    .place-icon-box { width: 40px; height: 36px; display: flex; align-items: center; }
+
+    /* People */
+    .person-item { background-color: #f8fafc; border: 1px solid #f1f5f9; transition: all 0.2s ease; }
+    .person-item:hover { background-color: #ffffff; border-color: #e2e8f0; }
+    .person-avatar { width: 44px; height: 44px; }
+
+    /* ตัวอักษรเทาของ Bootstrap ให้เป็นสีดำ */
+    .text-dark, .text-muted, .text-secondary { color: #000000 !important; }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+      .safeway-map-wrapper { height: 400px; }
+      .hero-title { font-size: 1.45rem !important; }
+      body.safeway-home-bg { background-image: url('../img/Bg-Tablet.JPG'); }
+    }
+    @media (max-width: 767.98px) {
+      .safeway-map-wrapper { height: 350px; }
+      body.safeway-home-bg { background-image: url('../img/Bg-Mobile.JPG'); }
+    }
+    @media (max-width: 575.98px) {
+      .hero-title { font-size: 1.3rem !important; }
+      .safeway-map-wrapper { height: 320px; }
+      .map-sos-overlay-card, .map-checkin-overlay-card { padding: 1rem; width: 92%; }
+      .saved-places-auto-grid { grid-template-columns: 1fr; }
+      #txt-plan-title { padding-left: 16px; }
+      .map-overlay-bottom-right { top: 12px; bottom: auto; right: auto; left: 12px; }
+      .map-overlay-bottom-left { display: none !important; }
+    }
+
+    /* iPad (768px - 991px) */
+    @media (min-width: 768px) and (max-width: 991.98px) {
+      .hero-section.d-none { display: block !important; }
+      .hero-subtitle { display: none; }
+      #mapSection { flex-wrap: nowrap; }
+      #mapSection > .order-2 { order: 1 !important; flex: 0 0 auto; width: 58.333333%; }
+      #mapSection > .order-1 { order: 2 !important; flex: 0 0 auto; width: 41.666667%; }
+      .plan-route-panel { height: 400px !important; }
+      #mapSection .route-summary-box.d-lg-flex { display: flex !important; }
+      #mapSection .route-summary-box.d-lg-none { display: none !important; }
+      #mapSection .d-flex.d-lg-none { display: none !important; }
+      #mapSection .map-overlay-bottom-right {
+        top: 0; bottom: auto; left: 0; right: 0; flex-direction: row-reverse !important;
+        justify-content: space-between; align-items: flex-start !important; pointer-events: none;
+      }
+      #mapSection .map-overlay-bottom-right .btn-map-control { pointer-events: auto; }
+      #peopleList { display: grid !important; grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* iPad Pro แนวตั้ง (992px - 1100px) */
+    @media (min-width: 992px) and (max-width: 1100px) and (orientation: portrait) {
+      body.safeway-home-bg { background-image: url('../img/Bg-Tablet.JPG'); }
+      .hero-subtitle { display: none; }
+      #mapSection .map-overlay-bottom-right {
+        top: 0; bottom: auto; left: 0; right: 0; flex-direction: row-reverse !important;
+        justify-content: space-between; align-items: flex-start !important; pointer-events: none;
+      }
+      #mapSection .map-overlay-bottom-right .btn-map-control { pointer-events: auto; }
+      #savedPlacesSection, #peopleSection { flex: 0 0 100%; width: 100%; max-width: 100%; }
+      #peopleList { display: grid !important; grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* จอคอม/แล็ปท็อปขนาดกลาง (992px - 1199px แนวนอน): ใช้สัดส่วนคอลัมน์แบบจอคอมเต็ม (8:4) */
+    @media (min-width: 992px) and (max-width: 1199.98px) and (orientation: landscape) {
+      #mapSection > .col-lg-7,
+      #savedPlacesSection { flex: 0 0 auto; width: 66.66666667%; }
+      #mapSection > .col-lg-5,
+      #peopleSection { flex: 0 0 auto; width: 33.33333333%; }
+    }
+
+    /* มือถือ (ต่ำกว่า 768px) */
+    @media (max-width: 767.98px) {
+      #mapSection .plan-route-panel { background-color: transparent !important; box-shadow: none !important; border: 0; padding: 0.5rem 0 !important; }
+      #mapSection .plan-route-panel > .d-flex { gap: 0.6rem; }
+      #mapSection .plan-route-panel .px-2.pt-1 { display: none !important; }
+      #mapSection .route-input-group .route-input { background-color: #ffffff !important; }
+      .panel-title { font-size: 1.1rem; }
+      #mapSection .safeway-map-wrapper { height: 380px; }
+      #mapSection .map-overlay-bottom-left { display: none !important; }
+      #mapSection .map-overlay-bottom-right {
+        top: 0; bottom: auto; left: 0; right: 0; flex-direction: row-reverse !important;
+        justify-content: space-between; align-items: flex-start !important; pointer-events: none;
+      }
+      #mapSection .map-overlay-bottom-right .btn-map-control { pointer-events: auto; }
+      #savedPlacesList { max-height: 280px; overflow-y: auto; }
+      #savedPlacesList .saved-place-card { min-height: 0; flex-direction: row !important; align-items: center; }
+      #savedPlacesList .place-card-top { display: grid; grid-template-columns: auto 1fr; column-gap: 0.75rem; align-items: center; }
+      #savedPlacesList .place-icon-box { grid-row: 1 / span 2; margin-bottom: 0 !important; }
+      #peopleList { max-height: 140px; overflow-y: auto; }
+    }
+
+    /* ===== Route Reviews ===== */
+    .review-row-btn { width:100%; border:1px solid #e2e8f0; background:#f1f5f9; border-radius:18px; height:50px; padding:0 1.2rem; display:flex; align-items:center; gap:.85rem; font-size:.95rem; font-weight:500; color:#000; cursor:pointer; transition:all .2s ease; text-align:left; }
+    .review-row-btn > span:first-of-type { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+    .review-row-btn:disabled, .review-mobile-btn:disabled { cursor:default; opacity:.75; transform:none !important; }
+    .review-row-btn:disabled:hover { background:#f1f5f9; border-color:#e2e8f0; }
+    .review-row-btn:hover { background:#fff; border-color:#3b82f6; transform:translateY(-1px); }
+    .review-row-btn .rv-count { margin-left:auto; margin-right:-4px; font-size:.8rem; font-weight:600; background:#3b82f6; color:#fff; border-radius:999px; padding:2px 10px; }
+    .review-mobile-btn { background:#fff; border:1px solid #e2e8f0; border-radius:1rem; padding:.9rem 1rem; width:100%; display:flex; align-items:center; gap:.75rem; font-weight:600; color:#000; }
+
+    .rv-modal .modal-content { border-radius:24px; border:0; }
+    .rv-summary { background:#f1f5f9; border-radius:18px; padding:12px 16px; }
+    .rv-bar { height:10px; border-radius:999px; background:#fecaca; overflow:hidden; }
+    .rv-bar > span { display:block; height:100%; background:#34AF67; transition:width .3s ease; }
+
+    .rv-form { border:1px solid #e2e8f0; border-radius:20px; padding:16px; background:#fff; }
+    .rv-verdict { display:flex; gap:8px; }
+    .rv-verdict button { flex:1; border-radius:999px; border:2px solid #e2e8f0; background:#fff; font-weight:600; padding:10px 8px; color:#000; transition:all .15s ease; }
+    .rv-verdict button.safe.active { background:#d1fae5; border-color:#34AF67; color:#14532d; }
+    .rv-verdict button.caution.active { background:#fef3c7; border-color:#f59e0b; color:#78350f; }
+    .rv-chip { border:1px solid #cbd5e1; background:#fff; border-radius:999px; padding:4px 14px; font-size:.85rem; color:#000; }
+    .rv-chip.active { background:#3C79C5; border-color:#3C79C5; color:#fff; }
+    .rv-text { border-radius:16px !important; resize:none; }
+    .rv-thumbs { display:flex; flex-wrap:wrap; gap:8px; }
+    .rv-thumb { position:relative; width:72px; height:72px; border-radius:12px; overflow:hidden; border:1px solid #e2e8f0; }
+    .rv-thumb img { width:100%; height:100%; object-fit:cover; }
+    .rv-thumb button { position:absolute; top:2px; right:2px; width:20px; height:20px; border:0; border-radius:50%; background:rgba(0,0,0,.65); color:#fff; font-size:11px; line-height:1; padding:0; }
+
+    .rv-item { border:1px solid #f1f5f9; background:#f8fafc; border-radius:18px; padding:14px 16px; }
+    .rv-avatar { width:38px; height:38px; border-radius:50%; background:#3C79C5; color:#fff; font-weight:600; display:grid; place-items:center; flex:none; }
+    .rv-tag { font-size:.75rem; font-weight:600; border-radius:999px; padding:2px 10px; }
+    .rv-tag.safe { background:#d1fae5; color:#14532d; }
+    .rv-tag.caution { background:#fef3c7; color:#78350f; }
+    .rv-tag.time { background:#e0e7ff; color:#312e81; }
+    .rv-suggest { display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:#e8f1ff; border:1px solid #bfd6f6; border-radius:14px; padding:8px 12px; margin-top:10px; }
+    .rv-suggest .rv-via { flex:1 1 140px; font-weight:500; min-width:0; word-break:break-word; }
+    .rv-suggest .btn { border-radius:999px; font-weight:600; font-size:.85rem; }
+    .rv-photos { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .rv-photos img { width:96px; height:96px; object-fit:cover; border-radius:12px; cursor:zoom-in; border:1px solid #e2e8f0; }
+    .rv-act { border:0; background:none; font-size:.85rem; color:#475569; padding:0; }
+    .rv-act:hover { color:#000; }
+    .rv-act.on { color:#3b82f6; font-weight:600; }
+
+    /* ===== Caution Areas ===== */
+    .review-row-btn .cw-count { margin-left:auto; margin-right:-4px; font-size:.8rem; font-weight:600; background:#f59e0b; color:#fff; border-radius:999px; padding:2px 10px; }
+    .cw-summary { display:flex; align-items:center; gap:10px; background:#fef3c7; border-radius:18px; padding:12px 16px; color:#78350f; }
+    .cw-chip { border:1px solid #cbd5e1; background:#fff; border-radius:999px; padding:4px 14px; font-size:.85rem; color:#000; transition:all .15s ease; }
+    .cw-chip.active { background:#f59e0b; border-color:#f59e0b; color:#fff; }
+    .rv-suggest.cw-spot { background:#fffbeb; border-color:#fde68a; }
+    .rv-tag.cwtype { background:#fef3c7; color:#78350f; }
+
+    /* ===== Live Trip Tracking ===== */
+    .trip-status { position:absolute; top:12px; left:50%; transform:translateX(-50%); z-index:30; display:flex; align-items:center; gap:10px; max-width:calc(100% - 140px); background:#fff; color:#000; border-radius:999px; padding:6px 8px 6px 14px; font-size:.85rem; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+    .trip-status .trip-dot { width:10px; height:10px; border-radius:50%; background:#34AF67; flex:none; animation:tripPulse 1.4s infinite; }
+    .trip-status.off .trip-dot { background:#DF3C3C; }
+    .trip-status.wait .trip-dot { background:#f59e0b; }
+    .trip-status #tripStatusText { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+    .trip-status button { border:0; background:#18181b; color:#fff; border-radius:999px; padding:3px 12px; font-size:.78rem; font-weight:600; flex:none; }
+    @keyframes tripPulse { 0%{opacity:1} 50%{opacity:.35} 100%{opacity:1} }
+    .trip-toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:2000; width:min(92vw,460px); background:#18181b; color:#fff; border-radius:18px; padding:14px 16px; box-shadow:0 10px 30px rgba(0,0,0,.35); display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .trip-toast.danger { background:#b91c1c; }
+    .trip-toast .trip-toast-text { flex:1 1 200px; font-size:.9rem; line-height:1.4; }
+    .trip-toast .trip-toast-btn { background:#fff; color:#000 !important; border-radius:999px; padding:4px 14px; font-size:.85rem; font-weight:600; text-decoration:none; }
+    .trip-toast .trip-toast-x { border:0; background:none; color:#fff; font-size:1rem; padding:0 4px; }
+  </style>
+</head>
+<body class="safeway-home-bg">
+
+  <audio id="sirenAudio" src="../sound/siren.mp3" loop preload="auto"></audio>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 1 1 12 0v6l2 2H4z"/><path d="M10 21h4"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  </svg>
+
+  <!-- ===== Header ===== -->
+  <header class="nav">
+    <div class="nav-in">
+      <a class="logo" href="home.html" aria-label="SafeWay">
+        <img src="../img/logo.png" alt="SafeWay" onerror="this.style.display='none'">
+      </a>
+      <nav aria-label="เมนูหลัก">
+        <ul class="links">
+          <li><a href="home.html" aria-current="page">Home</a></li>
+          <li><a href="map.html">Map</a></li>
+          <li><a href="savedplace.html">Saved Places</a></li>
+          <li><a href="people.html">People</a></li>
+        </ul>
+      </nav>
+
+      <label class="search">
+        <svg class="icon" width="18" height="18" style="cursor:pointer" onclick="executeNavSearch()"><use href="#i-search"/></svg>
+        <input type="search" id="quickNavSearch" placeholder="ค้นหาเส้นทาง" aria-label="ค้นหาเส้นทาง" onkeypress="handleNavSearch(event)">
+      </label>
+
+      <div class="nav-ico">
+        <!-- โปรไฟล์: กดแล้วไปหน้า Profile & Settings โดยตรง -->
+        <div class="d-inline-flex profile-dropdown">
+          <a class="circle profile-circle" href="setting.html" aria-label="โปรไฟล์"><svg class="icon"><use href="#i-user"/></svg></a>
+        </div>
+        <div class="dropdown d-inline-flex noti-desktop">
+          <a class="circle noti-circle dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="การแจ้งเตือน">
+            <svg class="icon"><use href="#i-bell"/></svg>
+            <span class="noti-dot"></span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-end noti-menu shadow border-0">
+            <div class="px-4 pt-4 pb-3"><h5 class="mb-0 fw-bold" style="font-size:1.15rem;color:#000;">Notifications</h5></div>
+            <hr class="my-0 mx-3" style="border-color:#d4d4d4;opacity:1;">
+            <div class="px-4 py-4 text-dark" id="notiList">
+              <p class="mb-3" style="font-size:1rem;line-height:1.4;"><strong>Kento Yamazaki</strong> shared live<br>location with you</p>
+              <p class="mb-1" style="font-size:1rem;line-height:1.4;">Routes around Silpakorn Univ.<br>have normal lighting</p>
+            </div>
+          </div>
+        </div>
+        <button class="burger" id="burger" type="button" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="drawer"><svg class="icon"><use href="#i-menu"/></svg></button>
+      </div>
+    </div>
+
+    <nav class="drawer" id="drawer" aria-label="เมนูมือถือ">
+      <div class="drawer-in">
+        <a href="home.html">Home</a>
+        <a href="map.html">Map</a>
+        <a href="savedplace.html">Saved Places</a>
+        <a href="people.html">People</a>
+        <a href="setting.html" class="m-only">Profile &amp; Settings</a>
+        <a href="#" class="m-only position-relative" data-bs-toggle="modal" data-bs-target="#mobileNotiModal" id="mobileNotiLink">New Message<span class="noti-dot-mobile"></span></a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero & Main Workspace -->
+  <main class="safeway-main-container pt-3 pt-md-4 pb-5 main-content">
+
+    <div class="hero-section mb-3 d-none d-lg-block">
+      <h2 class="fw-bold hero-title text-dark mb-2" id="txt-hero-title">Find a safer way home</h2>
+      <p class="text-secondary hero-subtitle mb-0" id="txt-hero-sub">
+        Plan safer routes, share your live location with trusted ones, and stay protected<br class="d-none d-md-block">
+        with anomaly detection and instant SOS assistance.
+      </p>
+    </div>
+
+    <!-- Upper Row: Map & Plan Your Route -->
+    <div class="row g-3 g-md-4 mb-4 align-items-stretch" id="mapSection">
+
+      <div class="col-lg-5 col-xl-4 col-12 order-1 order-lg-2">
+        <div class="safeway-card-panel plan-route-panel p-3 p-md-4 d-flex flex-column justify-content-between shadow-sm rounded-4 bg-white">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h3 class="panel-title fw-bold text-dark mb-2 text-start" id="txt-plan-title">Plan Your Route</h3>
+
+            <div class="route-input-group position-relative">
+              <span class="route-icon position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                <i class="fa-solid fa-location-dot"></i>
+              </span>
+              <span class="route-label-prefix position-absolute top-50 translate-middle-y text-muted small" style="left: 38px;" id="lbl-from">From</span>
+              <input type="text" class="form-control route-input" id="routeFrom" value="นาราชาเรสซิเดนซ์">
+            </div>
+
+            <div class="route-input-group position-relative">
+              <span class="route-icon position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                <i class="fa-solid fa-location-dot"></i>
+              </span>
+              <span class="route-label-prefix position-absolute top-50 translate-middle-y text-muted small" style="left: 38px;" id="lbl-to">To</span>
+              <input type="text" class="form-control route-input" id="routeTo" value="ศิลปากรสนามจันทร์">
+            </div>
+
+            <button type="button" class="btn btn-find-route w-100 fw-bold text-white rounded-pill d-flex align-items-center justify-content-center gap-2 shadow-sm" onclick="calculateSafeRoute()">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span id="txt-btn-find-route">Find Safe Route</span>
+            </button>
+
+            <div class="route-summary-box d-none d-lg-flex flex-column justify-content-between">
+              <div class="d-flex flex-column gap-2">
+                <button type="button" class="review-row-btn" id="rvRowBtn" onclick="openReviews()" disabled title="Search a route first">
+                  <i class="fa-solid fa-route text-primary fs-5 me-1"></i>
+                  <span id="rvRowText">Safer route</span>
+                  <span class="rv-count" id="rvRowCount" style="display:none">0</span>
+                  <i class="fa-solid fa-chevron-right small" id="rvRowChevron" style="display:none"></i>
+                </button>
+                <button type="button" class="review-row-btn" id="cwRowBtn" onclick="openCaution()" disabled title="Search a route first">
+                  <i class="fa-solid fa-triangle-exclamation text-warning fs-5 me-1"></i>
+                  <span id="txt-caution-area-lbl">Caution area</span>
+                  <span class="cw-count" id="cwRowCount" style="display:none">0</span>
+                  <i class="fa-solid fa-chevron-right small" id="cwRowChevron" style="display:none"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between px-2 pt-1">
+              <div class="d-flex align-items-center gap-2 text-dark fw-bold">
+                <i class="fa-regular fa-clock text-secondary"></i>
+                <span id="routeTime">25 min</span>
+              </div>
+              <div class="d-flex align-items-center gap-2 text-dark fw-bold">
+                <i class="fa-solid fa-person-walking text-secondary"></i>
+                <span id="routeDistance">2.6 km</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7 col-xl-8 col-12 order-2 order-lg-1">
+        <div class="safeway-map-wrapper shadow-sm rounded-4 overflow-hidden position-relative mb-3">
+
+          <div id="mapCheckinOverlay" class="map-checkin-overlay-card">
+            <div class="fw-bold fs-6" style="color: #065f46;">Send your current location to everyone in your contacts.</div>
+          </div>
+
+          <div id="mapSosOverlay" class="map-sos-overlay-card">
+            <div class="sos-badge-pill">
+              <span class="material-symbols-outlined">e911_emergency</span>
+              <span>SOS Alert</span>
+              <span class="material-symbols-outlined">e911_emergency</span>
+            </div>
+            <div class="fw-bold text-dark fs-6 mb-1">"Turn on the Siren"</div>
+            <p class="small text-muted mb-3 lh-sm" style="font-size: 0.85rem;">
+              Automatically send GPS locations an emergency messages to your emergency contacts.
+            </p>
+            <div>
+              <button type="button" class="btn btn-cancel-safe" onclick="stopSOS()">
+                Cancel , I'm safe.
+              </button>
+            </div>
+          </div>
+
+          <!-- สถานะการติดตามเส้นทาง -->
+          <div class="trip-status" id="tripStatus" hidden>
+            <span class="trip-dot"></span>
+            <span id="tripStatusText"></span>
+            <button type="button" onclick="stopTrip()">Stop</button>
+          </div>
+
+          <iframe
+            id="mainGoogleMap"
+            class="clean-zoomed-map"
+            src="https://maps.google.com/maps?q=13.8190,100.0400&z=14&hl=th&output=embed"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy">
+          </iframe>
+
+          <div class="map-overlay-bottom-left p-2 p-sm-3 d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-checkin shadow-sm rounded-pill fw-bold px-3 py-2 d-flex align-items-center gap-2" onclick="triggerCheckIn(event)">
+              <i class="fa-solid fa-location-dot text-dark"></i>
+              <span id="txt-btn-checkin">Check in</span>
+            </button>
+
+            <button type="button" id="mapSosBtn" class="btn btn-sos shadow-sm rounded-pill fw-bold px-3 py-2 d-flex align-items-center gap-2" onclick="triggerSOS(event)">
+              <span class="material-symbols-outlined">e911_emergency</span>
+              <span id="txt-btn-sos">SOS</span>
+            </button>
+          </div>
+
+          <div class="map-overlay-bottom-right p-2 p-sm-3 d-flex flex-column gap-2 align-items-end">
+            <button class="btn btn-map-control shadow-sm" onclick="locateUser(event)" title="ตำแหน่งปัจจุบัน">
+              <i class="fa-solid fa-crosshairs"></i>
+            </button>
+            <button class="btn btn-map-control shadow-sm" onclick="openFullscreenMapModal(event)" title="ขยายแผนที่ใหญ่">
+              <i class="fa-solid fa-expand"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ปุ่ม Check-in และ SOS สำหรับมือถือ -->
+        <div class="d-flex d-lg-none gap-2 mb-3">
+          <button type="button" class="btn btn-checkin flex-fill shadow-sm rounded-pill fw-bold py-2 d-flex align-items-center justify-content-center gap-2" onclick="triggerCheckIn(event)">
+            <i class="fa-solid fa-location-dot text-dark"></i>
+            <span>Check in</span>
+          </button>
+          <button type="button" id="mapSosBtnMobile" class="btn btn-sos flex-fill shadow-sm rounded-pill fw-bold py-2 d-flex align-items-center justify-content-center gap-2" onclick="triggerSOS(event)">
+            <span class="material-symbols-outlined">e911_emergency</span>
+            <span>SOS</span>
+          </button>
+        </div>
+
+        <!-- กล่อง Plan Your Route เฉพาะมือถือ -->
+        <div class="route-summary-box p-3 rounded-4 bg-white shadow-sm border d-block d-lg-none" onclick="calculateSafeRoute()">
+          <div class="fw-bold text-dark mb-1" style="font-size: 1.05rem;">Plan Your Route</div>
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2 text-dark">
+              <i class="fa-solid fa-person-walking text-dark fs-5"></i>
+              <span class="fw-semibold" id="routeSummaryText">12 min - 850 m</span>
+            </div>
+            <div class="text-dark fw-bold fs-5">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="review-mobile-btn shadow-sm mt-3 d-lg-none" id="rvMobBtn" onclick="openReviews()" disabled>
+          <i class="fa-solid fa-comments text-success fs-5"></i>
+          <span id="rvMobText">Safer route &amp; reviews</span>
+          <i class="fa-solid fa-chevron-right ms-auto"></i>
+        </button>
+
+        <button type="button" class="review-mobile-btn shadow-sm mt-2 d-lg-none" id="cwMobBtn" onclick="openCaution()" disabled>
+          <i class="fa-solid fa-triangle-exclamation text-warning fs-5"></i>
+          <span id="cwMobText">Caution area</span>
+          <i class="fa-solid fa-chevron-right ms-auto"></i>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Lower Row: Saved Places & People -->
+    <div class="row g-3 g-md-4">
+
+      <div class="col-lg-7 col-xl-8 col-12" id="savedPlacesSection">
+        <div class="safeway-card-panel p-3 p-md-4 h-100 shadow-sm rounded-4 bg-white">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-location-dot fs-4 text-dark"></i>
+              <h3 class="panel-title fw-bold text-dark mb-0" id="txt-saved-title">Your Saved Places</h3>
+            </div>
+
+            <a href="savedplace.html" class="btn btn-add-circle rounded-circle shadow-sm" title="Add Place" aria-label="Add Place">
+  <i class="fa-solid fa-plus"></i>
+</a>
+
+          </div>
+
+          <div class="saved-places-auto-grid gap-3" id="savedPlacesList">
+
+            <div class="saved-place-card p-3 rounded-4 d-flex flex-column justify-content-between border" onclick="location.href='savedplace.html#home'">
+              <div class="place-card-top">
+                <div class="place-icon-box mb-2 text-dark"><i class="fa-solid fa-house fs-4"></i></div>
+                <div class="fw-bold text-dark place-card-title mb-1">Home</div>
+                <div class="text-muted small">Nakhon Pathom</div>
+              </div>
+              <div class="place-card-bottom pt-2 text-secondary"><i class="fa-solid fa-person-walking fs-5"></i></div>
+            </div>
+
+            <div class="saved-place-card p-3 rounded-4 d-flex flex-column justify-content-between border" onclick="location.href='savedplace.html#university'">
+              <div class="place-card-top">
+                <div class="place-icon-box mb-2 text-dark"><i class="fa-solid fa-graduation-cap fs-4"></i></div>
+                <div class="fw-bold text-dark place-card-title mb-1">Silpakorn University</div>
+                <div class="text-muted small">Nakhon Pathom</div>
+              </div>
+              <div class="place-card-bottom pt-2 text-secondary"><i class="fa-solid fa-person-walking fs-5"></i></div>
+            </div>
+
+            <div class="saved-place-card p-3 rounded-4 d-flex flex-column justify-content-between border" onclick="location.href='savedplace.html#others'">
+              <div class="place-card-top">
+                <div class="place-icon-box mb-2 text-dark"><i class="fa-solid fa-users fs-4"></i></div>
+                <div class="fw-bold text-dark place-card-title mb-1">Friend's Place</div>
+                <div class="text-muted small">Nakhon Pathom</div>
+              </div>
+              <div class="place-card-bottom pt-2 text-secondary"><i class="fa-solid fa-person-walking fs-5"></i></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-xl-4 col-12" id="peopleSection">
+        <div class="safeway-card-panel p-3 p-md-4 h-100 shadow-sm rounded-4 bg-white">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-people-roof fs-4 text-dark"></i>
+              <h3 class="panel-title fw-bold text-dark mb-0" id="txt-people-title">People</h3>
+            </div>
+            <a href="people.html" class="btn btn-add-circle rounded-circle shadow-sm" title="Add Person" aria-label="Add Person">
+  <i class="fa-solid fa-plus"></i>
+</a>
+          </div>
+
+          <div class="people-list d-flex flex-column gap-2" id="peopleList">
+
+            <div class="person-item p-2 pe-3 rounded-4 d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <img src="../img/ken.png" class="person-avatar rounded-circle object-fit-cover" alt="Kento">
+                <div>
+                  <div class="fw-bold text-dark lh-sm">Ken</div>
+                  <div class="text-muted fs-8 person-role">Friends</div>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-call" onclick="callPerson('Ken', '081-234-5678')" title="Call"><i class="fa-solid fa-phone text-success"></i></button>
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-msg" onclick="messagePerson('Ken')" title="Send Message"><i class="fa-solid fa-comment text-primary"></i></button>
+              </div>
+            </div>
+
+            <div class="person-item p-2 pe-3 rounded-4 d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <img src="../img/kana.png" class="person-avatar rounded-circle object-fit-cover" alt="Kana">
+                <div>
+                  <div class="fw-bold text-dark lh-sm">Kana</div>
+                  <div class="text-muted fs-8 person-role">Family</div>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-call" onclick="callPerson('Kana', '089-876-5432')" title="Call"><i class="fa-solid fa-phone text-success"></i></button>
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-msg" onclick="messagePerson('Kana')" title="Send Message"><i class="fa-solid fa-comment text-primary"></i></button>
+              </div>
+            </div>
+
+            <div class="person-item p-2 pe-3 rounded-4 d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <img src="../img/mina.png" class="person-avatar rounded-circle object-fit-cover" alt="Mina">
+                <div>
+                  <div class="fw-bold text-dark lh-sm">Mina</div>
+                  <div class="text-muted fs-8 person-role">Friends</div>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-call" onclick="callPerson('Mina', '082-111-2233')" title="Call"><i class="fa-solid fa-phone text-success"></i></button>
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-msg" onclick="messagePerson('Mina')" title="Send Message"><i class="fa-solid fa-comment text-primary"></i></button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="foot">
+    <div class="foot-in">
+      <div><h4>About us</h4><p>Smart route planning and personal safety web app designed to keep your everyday journey secure and worry-free.</p></div>
+      <div><h4>Contact Us</h4><p>Email : safeway@gmail.com<br>Tel : 012-345-6789</p></div>
+      <div><h4>Follow Us</h4>
+        <div class="social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-square-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="LINE"><i class="fa-brands fa-line"></i></a>
+          <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal: แผนที่เต็มจอ -->
+  <div class="modal fade" id="fullMapModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content border-0">
+        <div class="modal-body p-0 position-relative">
+          <div class="full-modal-map-container">
+            <iframe
+              id="fullGoogleMap"
+              src="https://maps.google.com/maps?q=13.8190,100.0400&z=14&hl=th&output=embed"
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy">
+            </iframe>
+          </div>
+          <div class="position-absolute p-2 p-sm-3 d-flex flex-column gap-2 align-items-end" style="bottom: 16px; right: 16px; z-index: 20;">
+            <button class="btn btn-map-control shadow-sm" onclick="locateUser(event)" title="ตำแหน่งปัจจุบัน">
+              <i class="fa-solid fa-crosshairs"></i>
+            </button>
+            <button class="btn btn-map-control shadow-sm" data-bs-dismiss="modal" title="ย่อแผนที่">
+              <i class="fa-solid fa-expand"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+          <!-- Modal: Route Reviews -->
+  <div class="modal fade rv-modal" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content shadow">
+        <div class="modal-header border-0 pb-0 px-4 pt-4">
+          <div>
+            <h5 class="modal-title fw-bold" id="reviewModalLabel">Route Reviews</h5>
+            <div class="small" id="rvRouteName"></div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 pb-4">
+
+          <div class="rv-summary mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-bold" id="rvSummaryText">No reviews yet</span>
+              <span class="small" id="rvSummaryCount"></span>
+            </div>
+            <div class="rv-bar"><span id="rvBarFill" style="width:0%"></span></div>
+          </div>
+
+          <div class="rv-form mb-4">
+            <div class="fw-bold mb-2">Is this route safe?</div>
+            <div class="rv-verdict mb-3">
+              <button type="button" class="safe" data-verdict="safe"><i class="fa-solid fa-shield-heart me-1"></i> Safe</button>
+              <button type="button" class="caution" data-verdict="caution"><i class="fa-solid fa-triangle-exclamation me-1"></i> Be careful</button>
+            </div>
+
+            <div class="small fw-semibold mb-1">When did you walk here?</div>
+            <div class="d-flex flex-wrap gap-2 mb-3" id="rvTimeChips">
+              <button type="button" class="rv-chip" data-time="Daytime">Daytime</button>
+              <button type="button" class="rv-chip" data-time="Evening">Evening</button>
+              <button type="button" class="rv-chip" data-time="Late night">Late night</button>
+            </div>
+
+            <div class="small fw-semibold mb-1">Know a safer way? <span class="fw-normal">(optional)</span></div>
+            <div class="position-relative mb-3">
+              <i class="fa-solid fa-route position-absolute top-50 translate-middle-y ms-3"></i>
+              <input type="text" class="form-control rounded-pill ps-5" id="rvVia" maxlength="80" placeholder="Go via… (e.g., main road, near 7-Eleven)">
+            </div>
+
+            <textarea class="form-control rv-text mb-2" id="rvText" rows="3" maxlength="500" placeholder="Tell others about this route (lighting, people around, shops open...)"></textarea>
+            <div class="text-end small mb-2"><span id="rvTextCount">0</span>/500</div>
+
+            <div class="rv-thumbs mb-2" id="rvThumbs"></div>
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div>
+                <input type="file" id="rvFile" accept="image/*" multiple hidden>
+                <button type="button" class="btn btn-light border rounded-pill px-3" onclick="document.getElementById('rvFile').click()">
+                  <i class="fa-regular fa-image me-1"></i> Add photos <span class="small">(optional, max 3)</span>
+                </button>
+              </div>
+              <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="submitReview()">Post review</button>
+            </div>
+            <div class="text-danger small mt-2" id="rvError" style="display:none;"></div>
+          </div>
+
+          <h6 class="fw-bold mb-3">Latest reviews</h6>
+          <div class="d-flex flex-column gap-2" id="rvList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Photo viewer -->
+  <div class="modal fade" id="rvPhotoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-transparent border-0">
+        <img id="rvPhotoBig" src="" alt="Review photo" class="img-fluid rounded-4" data-bs-dismiss="modal">
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Caution Areas -->
+  <div class="modal fade rv-modal" id="cautionModal" tabindex="-1" aria-labelledby="cautionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content shadow">
+        <div class="modal-header border-0 pb-0 px-4 pt-4">
+          <div>
+            <h5 class="modal-title fw-bold" id="cautionModalLabel">Caution Areas</h5>
+            <div class="small" id="cwRouteName"></div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 pb-4">
+
+          <div class="cw-summary mb-3">
+            <i class="fa-solid fa-triangle-exclamation text-warning fs-5"></i>
+            <span class="fw-bold" id="cwSummaryText">No caution spots reported</span>
+          </div>
+
+          <div class="rv-form mb-4">
+            <div class="fw-bold mb-2">Report a caution spot</div>
+
+            <div class="small fw-semibold mb-1">What's the problem?</div>
+            <div class="d-flex flex-wrap gap-2 mb-3" id="cwTypeChips">
+              <button type="button" class="cw-chip" data-type="dark"><i class="fa-solid fa-lightbulb me-1"></i>Poor lighting</button>
+              <button type="button" class="cw-chip" data-type="isolated"><i class="fa-solid fa-user-slash me-1"></i>Isolated</button>
+              <button type="button" class="cw-chip" data-type="dogs"><i class="fa-solid fa-dog me-1"></i>Stray dogs</button>
+              <button type="button" class="cw-chip" data-type="road"><i class="fa-solid fa-road-circle-exclamation me-1"></i>Damaged road</button>
+              <button type="button" class="cw-chip" data-type="other"><i class="fa-solid fa-circle-exclamation me-1"></i>Other</button>
+            </div>
+
+            <div class="small fw-semibold mb-1">When is it risky?</div>
+            <div class="d-flex flex-wrap gap-2 mb-3" id="cwTimeChips">
+              <button type="button" class="cw-chip" data-cwtime="Daytime">Daytime</button>
+              <button type="button" class="cw-chip" data-cwtime="Evening">Evening</button>
+              <button type="button" class="cw-chip" data-cwtime="Late night">Late night</button>
+            </div>
+
+            <div class="small fw-semibold mb-1">Where? <span class="fw-normal">(place name, shows on map)</span></div>
+            <div class="position-relative mb-3">
+              <i class="fa-solid fa-location-dot position-absolute top-50 translate-middle-y ms-3"></i>
+              <input type="text" class="form-control rounded-pill ps-5" id="cwSpot" maxlength="80" placeholder="e.g., สะพานข้ามคลอง, ซอยหลังมหาวิทยาลัย">
+            </div>
+
+            <textarea class="form-control rv-text mb-2" id="cwText" rows="2" maxlength="300" placeholder="Describe what to watch out for..."></textarea>
+
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-warning rounded-pill px-4 fw-bold" onclick="submitCaution()">Report spot</button>
+            </div>
+            <div class="text-danger small mt-2" id="cwError" style="display:none;"></div>
+          </div>
+
+          <h6 class="fw-bold mb-3">Spots on this route</h6>
+          <div class="d-flex flex-column gap-2" id="cwList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Friend -->
+  <div class="modal fade" id="addPeopleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">Add Friend to Safety Network</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small text-muted">Friend Name</label>
+            <input type="text" class="form-control rounded-pill px-3" id="newFriendName" placeholder="e.g., John Safety">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small text-muted">Relationship</label>
+            <input type="text" class="form-control rounded-pill px-3" id="newFriendRole" placeholder="e.g., Friend, Sister">
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4" onclick="saveNewFriend()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: แจ้งเตือนมือถือ -->
+  <div class="modal fade" id="mobileNotiModal" tabindex="-1" aria-labelledby="mobileNotiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm px-3">
+      <div class="modal-content shadow border-0" style="border-radius:20px;">
+        <div class="modal-header border-0 pb-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold" id="mobileNotiModalLabel" style="font-size:1.15rem;color:#000;">Notifications</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-dark pt-3 pb-4 px-4">
+          <hr class="mt-0 mb-3" style="border-color:#d4d4d4;opacity:1;">
+          <p class="mb-3" style="font-size:1rem;line-height:1.4;"><strong>Kento Yamazaki</strong> shared live<br>location with you</p>
+          <p class="mb-1" style="font-size:1rem;line-height:1.4;">Routes around Silpakorn Univ.<br>have normal lighting</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- แจ้งเตือนการเดินทาง (นอกเส้นทาง / ถึงที่หมาย) -->
+  <div class="trip-toast" id="tripToast" role="status" aria-live="polite" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ===== เมนูมือถือ =====
+    const burger = document.getElementById("burger");
+    const drawer = document.getElementById("drawer");
+    function setMenu(open) {
+      drawer.classList.toggle("open", open);
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+    burger.addEventListener("click", e => { e.stopPropagation(); setMenu(!drawer.classList.contains("open")); });
+    document.addEventListener("click", e => { if (!drawer.contains(e.target)) setMenu(false); });
+    document.getElementById("mobileNotiLink").addEventListener("click", () => setMenu(false));
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && drawer.classList.contains("open")) { setMenu(false); burger.focus(); } });
+    window.addEventListener("resize", () => { if (window.innerWidth > 1100) setMenu(false); });
+
+    // ===== SOS / Check-in / Map =====
+    let isSosActive = false;
+
+    function startSirenSound() {
+      const audio = document.getElementById('sirenAudio');
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(err => { console.warn('Audio play error:', err); });
+      }
+    }
+
+    function stopSirenSound() {
+      const audio = document.getElementById('sirenAudio');
+      if (audio) { audio.pause(); audio.currentTime = 0; }
+    }
+
+    function triggerSOS(e) {
+      if (e) e.stopPropagation();
+      if (isSosActive) return;
+
+      isSosActive = true;
+      document.body.classList.add('sos-active');
+      document.getElementById('mapSosOverlay').classList.add('active');
+
+      const sosBtn = document.getElementById('mapSosBtn');
+      if (sosBtn) {
+        sosBtn.disabled = true;
+        sosBtn.innerHTML = '<span class="material-symbols-outlined text-danger">e911_emergency</span> Siren Active...';
+      }
+      const sosBtnMob = document.getElementById('mapSosBtnMobile');
+      if (sosBtnMob) {
+        sosBtnMob.disabled = true;
+        sosBtnMob.innerHTML = '<span class="material-symbols-outlined text-danger">e911_emergency</span> Siren Active...';
+      }
+
+      startSirenSound();
+    }
+
+    function stopSOS() {
+      isSosActive = false;
+      document.body.classList.remove('sos-active');
+      document.getElementById('mapSosOverlay').classList.remove('active');
+
+      const sosBtn = document.getElementById('mapSosBtn');
+      if (sosBtn) {
+        sosBtn.disabled = false;
+        sosBtn.innerHTML = '<span class="material-symbols-outlined text-danger">e911_emergency</span> <span>SOS</span>';
+      }
+      const sosBtnMob = document.getElementById('mapSosBtnMobile');
+      if (sosBtnMob) {
+        sosBtnMob.disabled = false;
+        sosBtnMob.innerHTML = '<span class="material-symbols-outlined text-danger">e911_emergency</span> <span>SOS</span>';
+      }
+
+      stopSirenSound();
+    }
+
+    function triggerCheckIn(e) {
+      if (e) e.stopPropagation();
+
+      const checkinOverlay = document.getElementById('mapCheckinOverlay');
+      if (checkinOverlay) {
+        checkinOverlay.classList.add('active');
+        setTimeout(() => { checkinOverlay.classList.remove('active'); }, 4000);
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            document.getElementById('routeFrom').value = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+            calculateSafeRoute();
+          },
+          (error) => { alert('ไม่สามารถดึงตำแหน่งปัจจุบันได้ กรุณาเปิดการอนุญาตเข้าถึงตำแหน่ง (GPS)'); },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      } else {
+        alert('เบราว์เซอร์ของคุณไม่รองรับการระบุตำแหน่งทางภูมิศาสตร์ (Geolocation)');
+      }
+    }
+
+    function locateUser(e) {
+      if (e) e.stopPropagation();
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            alert(`📍 ตำแหน่งปัจจุบันของคุณ:\nละติจูด: ${lat.toFixed(6)}\nลองจิจูด: ${lon.toFixed(6)}`);
+          },
+          (error) => { alert('ไม่สามารถระบุตำแหน่งปัจจุบันได้ กรุณาตรวจสอบการอนุญาตเข้าถึง GPS'); },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      } else {
+        alert('เบราว์เซอร์ของคุณไม่รองรับ Geolocation');
+      }
+    }
+
+    function calculateSafeRoute() {
+      const fromVal = document.getElementById('routeFrom').value.trim();
+      const toVal = document.getElementById('routeTo').value.trim();
+
+      if (!fromVal || !toVal) {
+        alert('กรุณากรอกสถานที่ต้นทางและปลายทาง');
+        return;
+      }
+
+      const mapIframe = document.getElementById('mainGoogleMap');
+      const fromQuery = encodeURIComponent(fromVal);
+      const toQuery = encodeURIComponent(toVal);
+
+      mapIframe.src = `https://maps.google.com/maps?saddr=${fromQuery}&daddr=${toQuery}&z=14&hl=th&dirflg=w&output=embed`;
+
+      const baseDist = ((fromVal.length + toVal.length) * 0.15).toFixed(1);
+      const dist = Math.max(0.8, parseFloat(baseDist)).toFixed(1);
+      const mins = Math.round(dist * 9 + 2);
+      const meters = Math.round(dist * 1000);
+
+      document.getElementById('routeTime').innerText = mins + ' min';
+      document.getElementById('routeDistance').innerText = dist + ' km';
+      document.getElementById('routeSummaryText').innerText = `${mins} min - ${meters} m`;
+    }
+
+    function handleNavSearch(e) {
+      if (e.key === 'Enter') executeNavSearch();
+    }
+
+    function executeNavSearch() {
+      const val = document.getElementById('quickNavSearch').value.trim();
+      if (val) {
+        document.getElementById('routeTo').value = val;
+        calculateSafeRoute();
+      }
+    }
+
+    function selectSavedPlace(placeName) {
+      document.getElementById('routeTo').value = placeName;
+      calculateSafeRoute();
+    }
+
+    function saveNewFriend() {
+      const name = document.getElementById('newFriendName').value.trim();
+      const role = document.getElementById('newFriendRole').value.trim() || 'Friends';
+
+      if (!name) {
+        alert('กรุณาระบุชื่อเพื่อน');
+        return;
+      }
+
+      const list = document.getElementById('peopleList');
+      const item = document.createElement('div');
+      item.className = 'person-item p-2 pe-3 rounded-4 d-flex align-items-center justify-content-between';
+      item.innerHTML = `
+        <div class="d-flex align-items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" class="person-avatar rounded-circle object-fit-cover" alt="${name}">
+          <div>
+            <div class="fw-bold text-dark lh-sm">${name}</div>
+            <div class="text-muted fs-8 person-role">${role}</div>
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-call" onclick="callPerson('${name}', '080-000-0000')" title="Call"><i class="fa-solid fa-phone text-success"></i></button>
+          <button class="btn btn-sm btn-light rounded-circle shadow-sm btn-msg" onclick="messagePerson('${name}')" title="Send Message"><i class="fa-solid fa-comment text-primary"></i></button>
+        </div>
+      `;
+
+      list.appendChild(item);
+      document.getElementById('newFriendName').value = '';
+      document.getElementById('newFriendRole').value = '';
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('addPeopleModal'));
+      if (modal) modal.hide();
+    }
+
+    function callPerson(name, phone) {
+      alert(` กำลังโทรหา ${name} (${phone})...`);
+    }
+
+    function messagePerson(name) {
+      alert(`💬 เปิดหน้าต่างข้อความถึง ${name}`);
+    }
+
+    function openFullscreenMapModal(e) {
+      if (e) e.stopPropagation();
+      const currentSrc = document.getElementById('mainGoogleMap').src;
+      document.getElementById('fullGoogleMap').src = currentSrc;
+      const modal = new bootstrap.Modal(document.getElementById('fullMapModal'));
+      modal.show();
+    }
+    // ===== Route Reviews (demo: เก็บในหน่วยความจำ ยังไม่ต่อ Firebase) =====
+    const rvStore = {};   // key = "from → to"
+    const rvApplied = {}; // key -> via ที่ผู้ใช้เลือกแสดงบนแผนที่
+    let rvSearchedKey = null; // เส้นทางที่ผู้ใช้กด Find Safe Route แล้ว (รีวิวจะแสดงเมื่อเส้นทางตรงกันเท่านั้น)
+    function rvIsSearched() { return rvSearchedKey !== null && rvSearchedKey === rvKey(); }
+    const rvDraft = { verdict: null, time: null, photos: [] };
+    const RV_MAX_PHOTOS = 3, RV_MAX_MB = 5;
+
+    function rvKey() {
+      const f = document.getElementById('routeFrom').value.trim().toLowerCase();
+      const t = document.getElementById('routeTo').value.trim().toLowerCase();
+      return f + ' → ' + t;
+    }
+    function rvRouteLabel() {
+      return document.getElementById('routeFrom').value.trim() + ' → ' + document.getElementById('routeTo').value.trim();
+    }
+    function rvList() { const k = rvKey(); return rvStore[k] || (rvStore[k] = []); }
+
+    // ข้อมูลตัวอย่างสำหรับเส้นทางเริ่มต้น
+    rvStore[rvKey()] = [
+      { name: 'Mild', verdict: 'safe', time: 'Evening', text: 'Main road is well lit and there are shops open until 9 PM. Felt fine walking alone.', photos: [], helpful: 6, ago: '2 days ago' },
+      { name: 'Pim', verdict: 'caution', time: 'Late night', text: 'The stretch near the bridge has a few broken street lights. Better to walk with a friend after 10 PM.', dest: 'มหาวิทยาลัยศิลปากร วิทยาเขตสนามจันทร์', photos: [], helpful: 9, ago: '5 days ago' },
+      { name: 'Ploy', verdict: 'safe', time: 'Daytime', text: 'Lots of students and motorbike taxis around during the day.', photos: [], helpful: 2, ago: '1 week ago' }
+    ];
+
+    function updateReviewSummary() {
+      updateCautionSummary();
+      const searched = rvIsSearched();
+      const rowBtn = document.getElementById('rvRowBtn');
+      const mobBtn = document.getElementById('rvMobBtn');
+      rowBtn.disabled = !searched;
+      mobBtn.disabled = !searched;
+      rowBtn.title = searched ? 'See reviews and safer routes suggested by others' : 'Search a route first';
+      document.getElementById('rvRowCount').style.display = searched ? '' : 'none';
+      document.getElementById('rvRowChevron').style.display = searched ? '' : 'none';
+      if (!searched) {
+        document.getElementById('rvRowText').textContent = 'Safer route';
+        document.getElementById('rvMobText').textContent = 'Safer route & reviews';
+        return;
+      }
+      const list = rvList();
+      const n = list.length;
+      const safe = list.filter(r => r.verdict === 'safe').length;
+      const pct = n ? Math.round(safe / n * 100) : 0;
+      const via = rvApplied[rvKey()];
+      let rowText = 'Safer route';
+      if (via) rowText += ` · ${via}`;
+      else if (n) rowText += ` · ${pct}% say safe`;
+      document.getElementById('rvRowText').textContent = rowText;
+      document.getElementById('rvRowCount').textContent = n;
+      document.getElementById('rvMobText').textContent = via ? `Safer route · ${via}` : (n ? `Safer route & reviews · ${pct}% safe` : 'Safer route & reviews');
+    }
+
+    function rvTimeAgo(r) { return r.ago || 'just now'; }
+
+    function renderReviews() {
+      const list = rvList();
+      const n = list.length;
+      const safe = list.filter(r => r.verdict === 'safe').length;
+      const pct = n ? Math.round(safe / n * 100) : 0;
+
+      document.getElementById('rvRouteName').textContent = rvRouteLabel();
+      document.getElementById('rvSummaryText').textContent = n ? `${pct}% say this route is safe` : 'No reviews yet – be the first!';
+      document.getElementById('rvSummaryCount').textContent = n ? `${n} review${n > 1 ? 's' : ''}` : '';
+      document.getElementById('rvBarFill').style.width = (n ? pct : 0) + '%';
+
+      const box = document.getElementById('rvList');
+      box.innerHTML = '';
+      if (!n) {
+        const e = document.createElement('div');
+        e.className = 'text-center py-4';
+        e.textContent = 'Nobody has reviewed this route yet.';
+        box.appendChild(e);
+        return;
+      }
+      list.forEach((r, idx) => {
+        const item = document.createElement('div');
+        item.className = 'rv-item';
+
+        const head = document.createElement('div');
+        head.className = 'd-flex align-items-center gap-2 mb-2';
+        const av = document.createElement('div'); av.className = 'rv-avatar'; av.textContent = (r.name[0] || '?').toUpperCase();
+        const meta = document.createElement('div'); meta.className = 'flex-grow-1';
+        const nm = document.createElement('div'); nm.className = 'fw-bold lh-sm'; nm.textContent = r.name;
+        const ag = document.createElement('div'); ag.className = 'small'; ag.textContent = rvTimeAgo(r);
+        meta.append(nm, ag);
+        head.append(av, meta);
+        item.appendChild(head);
+
+        const tags = document.createElement('div');
+        tags.className = 'd-flex flex-wrap gap-2 mb-2';
+        const t1 = document.createElement('span');
+        t1.className = 'rv-tag ' + r.verdict;
+        t1.textContent = r.verdict === 'safe' ? 'Safe' : 'Be careful';
+        tags.appendChild(t1);
+        if (r.time) { const t2 = document.createElement('span'); t2.className = 'rv-tag time'; t2.textContent = r.time; tags.appendChild(t2); }
+        item.appendChild(tags);
+
+        if (r.text) { const p = document.createElement('p'); p.className = 'mb-0'; p.style.whiteSpace = 'pre-wrap'; p.textContent = r.text; item.appendChild(p); }
+
+        if (r.dest || r.via) {
+          const sg = document.createElement('div'); sg.className = 'rv-suggest';
+          const ic = document.createElement('i'); ic.className = 'fa-solid fa-route text-primary';
+          const vt = document.createElement('div'); vt.className = 'rv-via';
+          const lb = document.createElement('span'); lb.className = 'small d-block'; lb.textContent = 'Suggested safer route';
+          const vv = document.createElement('span'); vv.textContent = rvSuggestText(r);
+          vt.append(lb, vv);
+          const on = rvApplied[rvKey()] === rvSuggestText(r);
+          const bt = document.createElement('button'); bt.type = 'button';
+          bt.className = 'btn btn-sm ' + (on ? 'btn-success' : 'btn-primary');
+          bt.innerHTML = on ? '<i class="fa-solid fa-check me-1"></i>' : '<i class="fa-solid fa-map-location-dot me-1"></i>';
+          bt.append(on ? 'Showing on map' : 'Show on map');
+          bt.onclick = () => applySaferRoute(r);
+          sg.append(ic, vt, bt);
+          item.appendChild(sg);
+        }
+
+        if (r.photos.length) {
+          const ph = document.createElement('div'); ph.className = 'rv-photos';
+          r.photos.forEach(src => {
+            const im = document.createElement('img'); im.src = src; im.alt = 'Review photo';
+            im.onclick = () => openReviewPhoto(src);
+            ph.appendChild(im);
+          });
+          item.appendChild(ph);
+        }
+
+        const act = document.createElement('div');
+        act.className = 'd-flex gap-3 mt-3';
+        const hb = document.createElement('button'); hb.type = 'button'; hb.className = 'rv-act' + (r.liked ? ' on' : '');
+        hb.innerHTML = '<i class="fa-regular fa-thumbs-up me-1"></i>';
+        hb.append(`Helpful (${r.helpful})`);
+        hb.onclick = () => { r.liked = !r.liked; r.helpful += r.liked ? 1 : -1; renderReviews(); };
+        const rb = document.createElement('button'); rb.type = 'button'; rb.className = 'rv-act';
+        rb.innerHTML = '<i class="fa-regular fa-flag me-1"></i>';
+        rb.append(r.reported ? 'Reported' : 'Report');
+        rb.disabled = !!r.reported;
+        rb.onclick = () => { r.reported = true; renderReviews(); };
+        act.append(hb, rb);
+        item.appendChild(act);
+
+        box.appendChild(item);
+      });
+    }
+
+    // คำอธิบายเส้นทางที่แนะนำ: dest = ไปปลายทางนี้โดยตรง, via = แวะผ่านจุดนี้ก่อนไปปลายทางเดิม
+    function rvSuggestText(r) { return r.dest ? 'to ' + r.dest : (r.via ? 'via ' + r.via : ''); }
+
+    function applySaferRoute(r) {
+      const fromVal = document.getElementById('routeFrom').value.trim();
+      const toVal = document.getElementById('routeTo').value.trim();
+      if (!fromVal || !toVal || !(r.dest || r.via)) return;
+      rvApplied[rvKey()] = rvSuggestText(r);
+      const daddr = r.dest
+        ? encodeURIComponent(r.dest)
+        : `${encodeURIComponent(r.via)}+to:${encodeURIComponent(toVal)}`;
+      document.getElementById('mainGoogleMap').src =
+        `https://maps.google.com/maps?saddr=${encodeURIComponent(fromVal)}&daddr=${daddr}&z=14&hl=th&dirflg=w&output=embed`;
+      updateReviewSummary();
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('reviewModal')).hide();
+    }
+
+    function openReviews() {
+      if (!rvIsSearched()) return;
+      renderReviews();
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('reviewModal')).show();
+    }
+
+    function openReviewPhoto(src) {
+      document.getElementById('rvPhotoBig').src = src;
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('rvPhotoModal')).show();
+    }
+
+    function rvShowError(msg) {
+      const e = document.getElementById('rvError');
+      e.textContent = msg || '';
+      e.style.display = msg ? 'block' : 'none';
+    }
+
+    function renderThumbs() {
+      const box = document.getElementById('rvThumbs');
+      box.innerHTML = '';
+      rvDraft.photos.forEach((src, i) => {
+        const w = document.createElement('div'); w.className = 'rv-thumb';
+        const im = document.createElement('img'); im.src = src; im.alt = '';
+        const x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'Remove photo');
+        x.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        x.onclick = () => { URL.revokeObjectURL(rvDraft.photos[i]); rvDraft.photos.splice(i, 1); renderThumbs(); };
+        w.append(im, x);
+        box.appendChild(w);
+      });
+    }
+
+    function submitReview() {
+      const text = document.getElementById('rvText').value.trim();
+      const via = document.getElementById('rvVia').value.trim();
+      if (!rvDraft.verdict) { rvShowError('Please choose Safe or Be careful.'); return; }
+      if (!text && !via && !rvDraft.photos.length) { rvShowError('Please write a comment, suggest a route, or add a photo.'); return; }
+      rvShowError('');
+
+      rvList().unshift({
+        name: 'You',
+        verdict: rvDraft.verdict,
+        time: rvDraft.time,
+        text: text,
+        via: via,
+        photos: rvDraft.photos.slice(),
+        helpful: 0,
+        ago: 'just now'
+      });
+
+      // reset form (ไม่ revoke รูป เพราะรีวิวยังใช้อยู่)
+      rvDraft.verdict = null; rvDraft.time = null; rvDraft.photos = [];
+      document.getElementById('rvText').value = '';
+      document.getElementById('rvVia').value = '';
+      document.getElementById('rvTextCount').textContent = '0';
+      document.querySelectorAll('.rv-verdict button, .rv-chip').forEach(b => b.classList.remove('active'));
+      renderThumbs();
+      renderReviews();
+      updateReviewSummary();
+    }
+
+    document.querySelectorAll('.rv-verdict button').forEach(b => b.addEventListener('click', () => {
+      rvDraft.verdict = b.dataset.verdict;
+      document.querySelectorAll('.rv-verdict button').forEach(x => x.classList.toggle('active', x === b));
+      rvShowError('');
+    }));
+    document.querySelectorAll('.rv-chip').forEach(b => b.addEventListener('click', () => {
+      const same = rvDraft.time === b.dataset.time;
+      rvDraft.time = same ? null : b.dataset.time;
+      document.querySelectorAll('.rv-chip').forEach(x => x.classList.toggle('active', !same && x === b));
+    }));
+    document.getElementById('rvText').addEventListener('input', e => {
+      document.getElementById('rvTextCount').textContent = e.target.value.length;
+    });
+    document.getElementById('rvFile').addEventListener('change', e => {
+      rvShowError('');
+      for (const f of e.target.files) {
+        if (rvDraft.photos.length >= RV_MAX_PHOTOS) { rvShowError(`You can add up to ${RV_MAX_PHOTOS} photos.`); break; }
+        if (!f.type.startsWith('image/')) { rvShowError('Only image files are allowed.'); continue; }
+        if (f.size > RV_MAX_MB * 1024 * 1024) { rvShowError(`Each photo must be under ${RV_MAX_MB} MB.`); continue; }
+        rvDraft.photos.push(URL.createObjectURL(f));
+      }
+      e.target.value = '';
+      renderThumbs();
+    });
+
+    // ===== Caution Areas (demo: เก็บในหน่วยความจำ) =====
+    const cwStore = {};                       // key = "from → to"
+    const cwDraft = { type: null, time: null };
+    const CW_TYPES = {
+      dark:     { label: 'Poor lighting', icon: 'fa-lightbulb' },
+      isolated: { label: 'Isolated',      icon: 'fa-user-slash' },
+      dogs:     { label: 'Stray dogs',    icon: 'fa-dog' },
+      road:     { label: 'Damaged road',  icon: 'fa-road-circle-exclamation' },
+      other:    { label: 'Other',         icon: 'fa-circle-exclamation' }
+    };
+
+    function cwList() { const k = rvKey(); return cwStore[k] || (cwStore[k] = []); }
+
+    // รวม: รายงานจุดเสี่ยงโดยตรง + รีวิวที่กด "Be careful"
+    function cwItems() {
+      const reports = cwList().map(h => ({ ...h, source: 'report' }));
+      const fromReviews = rvList()
+        .filter(r => r.verdict === 'caution')
+        .map(r => ({
+          source: 'review', type: null, name: r.name, time: r.time, ago: r.ago || 'just now',
+          text: r.text || 'Marked this route as "Be careful"', spot: r.dest || r.via || ''
+        }));
+      return [...reports, ...fromReviews];
+    }
+
+    function updateCautionSummary() {
+      const searched = rvIsSearched();
+      const btn = document.getElementById('cwRowBtn');
+      const mob = document.getElementById('cwMobBtn');
+      btn.disabled = !searched;
+      mob.disabled = !searched;
+      btn.title = searched ? 'See caution spots on this route' : 'Search a route first';
+      const badge = document.getElementById('cwRowCount');
+      const chev = document.getElementById('cwRowChevron');
+      if (!searched) {
+        badge.style.display = 'none';
+        chev.style.display = 'none';
+        document.getElementById('cwMobText').textContent = 'Caution area';
+        return;
+      }
+      const n = cwItems().length;
+      badge.textContent = n;
+      badge.style.display = n ? '' : 'none';
+      chev.style.display = '';
+      document.getElementById('cwMobText').textContent = n ? `Caution area · ${n} spot${n > 1 ? 's' : ''}` : 'Caution area';
+    }
+
+    function renderCaution() {
+      const items = cwItems();
+      const n = items.length;
+      document.getElementById('cwRouteName').textContent = rvRouteLabel();
+      document.getElementById('cwSummaryText').textContent =
+        n ? `${n} caution spot${n > 1 ? 's' : ''} reported on this route` : 'No caution spots reported yet';
+
+      const box = document.getElementById('cwList');
+      box.innerHTML = '';
+      if (!n) {
+        const e = document.createElement('div');
+        e.className = 'text-center py-4';
+        e.textContent = 'Nobody has reported a caution spot on this route.';
+        box.appendChild(e);
+        return;
+      }
+
+      items.forEach(h => {
+        const item = document.createElement('div');
+        item.className = 'rv-item';
+
+        const head = document.createElement('div');
+        head.className = 'd-flex align-items-center gap-2 mb-2';
+        const av = document.createElement('div'); av.className = 'rv-avatar'; av.textContent = ((h.name || '?')[0]).toUpperCase();
+        const meta = document.createElement('div'); meta.className = 'flex-grow-1';
+        const nm = document.createElement('div'); nm.className = 'fw-bold lh-sm'; nm.textContent = h.name || 'Anonymous';
+        const ag = document.createElement('div'); ag.className = 'small'; ag.textContent = h.ago || 'just now';
+        meta.append(nm, ag);
+        head.append(av, meta);
+        item.appendChild(head);
+
+        const tags = document.createElement('div');
+        tags.className = 'd-flex flex-wrap gap-2 mb-2';
+        const t = CW_TYPES[h.type];
+        const t1 = document.createElement('span');
+        t1.className = 'rv-tag cwtype';
+        if (t) {
+          const ic = document.createElement('i'); ic.className = 'fa-solid ' + t.icon + ' me-1';
+          t1.append(ic, t.label);
+        } else {
+          t1.textContent = 'From review';
+        }
+        tags.appendChild(t1);
+        if (h.time) { const t2 = document.createElement('span'); t2.className = 'rv-tag time'; t2.textContent = h.time; tags.appendChild(t2); }
+        item.appendChild(tags);
+
+        if (h.text) {
+          const p = document.createElement('p'); p.className = 'mb-0'; p.style.whiteSpace = 'pre-wrap'; p.textContent = h.text;
+          item.appendChild(p);
+        }
+
+        if (h.spot) {
+          const sg = document.createElement('div'); sg.className = 'rv-suggest cw-spot';
+          const ic = document.createElement('i'); ic.className = 'fa-solid fa-location-dot text-warning';
+          const vt = document.createElement('div'); vt.className = 'rv-via';
+          const lb = document.createElement('span'); lb.className = 'small d-block'; lb.textContent = 'Location';
+          const vv = document.createElement('span'); vv.textContent = h.spot;
+          vt.append(lb, vv);
+          const bt = document.createElement('button'); bt.type = 'button'; bt.className = 'btn btn-sm btn-warning';
+          bt.innerHTML = '<i class="fa-solid fa-map-location-dot me-1"></i>';
+          bt.append('Show on map');
+          bt.onclick = () => cwShowOnMap(h.spot);
+          sg.append(ic, vt, bt);
+          item.appendChild(sg);
+        }
+
+        box.appendChild(item);
+      });
+    }
+
+    function cwShowOnMap(spot) {
+      document.getElementById('mainGoogleMap').src =
+        `https://maps.google.com/maps?q=${encodeURIComponent(spot)}&z=16&hl=th&output=embed`;
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('cautionModal')).hide();
+    }
+
+    function openCaution() {
+      if (!rvIsSearched()) return;
+      renderCaution();
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('cautionModal')).show();
+    }
+
+    function cwShowError(msg) {
+      const e = document.getElementById('cwError');
+      e.textContent = msg || '';
+      e.style.display = msg ? 'block' : 'none';
+    }
+
+    function submitCaution() {
+      const text = document.getElementById('cwText').value.trim();
+      const spot = document.getElementById('cwSpot').value.trim();
+      if (!cwDraft.type) { cwShowError('Please choose what the problem is.'); return; }
+      if (!text && !spot) { cwShowError('Please add a location or a short description.'); return; }
+      cwShowError('');
+
+      cwList().unshift({ type: cwDraft.type, time: cwDraft.time, text, spot, name: 'You', ago: 'just now' });
+
+      cwDraft.type = null; cwDraft.time = null;
+      document.getElementById('cwText').value = '';
+      document.getElementById('cwSpot').value = '';
+      document.querySelectorAll('.cw-chip').forEach(b => b.classList.remove('active'));
+      renderCaution();
+      updateCautionSummary();
+    }
+
+    document.querySelectorAll('#cwTypeChips .cw-chip').forEach(b => b.addEventListener('click', () => {
+      cwDraft.type = b.dataset.type;
+      document.querySelectorAll('#cwTypeChips .cw-chip').forEach(x => x.classList.toggle('active', x === b));
+      cwShowError('');
+    }));
+    document.querySelectorAll('#cwTimeChips .cw-chip').forEach(b => b.addEventListener('click', () => {
+      const same = cwDraft.time === b.dataset.cwtime;
+      cwDraft.time = same ? null : b.dataset.cwtime;
+      document.querySelectorAll('#cwTimeChips .cw-chip').forEach(x => x.classList.toggle('active', !same && x === b));
+    }));
+
+    // ข้อมูลตัวอย่างสำหรับเส้นทางเริ่มต้น
+    cwStore[rvKey()] = [
+      { type: 'dark', time: 'Late night', name: 'Mild', ago: '3 days ago',
+        text: 'Several street lights are out along this stretch.', spot: 'สะพานข้ามคลอง ศิลปากรสนามจันทร์' }
+    ];
+
+    // อัปเดตสรุปรีวิวทุกครั้งที่ค้นหาเส้นทางใหม่
+    const _calcRouteOrig = calculateSafeRoute;
+    calculateSafeRoute = function () {
+      const from = document.getElementById('routeFrom').value.trim();
+      const to = document.getElementById('routeTo').value.trim();
+      if (!from || !to) { _calcRouteOrig(); return; }   // ให้ฟังก์ชันเดิมแจ้งเตือนเอง
+      delete rvApplied[rvKey()];
+      _calcRouteOrig();
+      rvSearchedKey = rvKey();
+      updateReviewSummary();
+    };
+    ['routeFrom', 'routeTo'].forEach(id => document.getElementById(id).addEventListener('input', updateReviewSummary));
+    updateReviewSummary();
+
+    // =====================================================================
+    // ===== Live Trip Tracking: ติดตามการเดิน / เตือนเมื่อออกนอกเส้นทาง =====
+    // =====================================================================
+    // หมายเหตุ: แผนที่ Google แบบ iframe วาดเส้น/อ่านเส้นทางไม่ได้ จึงดึงเส้นทางเดินเท้า
+    // (OpenStreetMap) มาเก็บเป็น "เส้นทางหลัก" ไว้คำนวณเบื้องหลังเท่านั้น
+    const OFF_ROUTE_M = 50;          // ห่างจากเส้นทางเกินกี่เมตรถือว่านอกเส้นทาง
+    const ARRIVE_M = 25;             // เหลือน้อยกว่ากี่เมตรถือว่าถึงที่หมาย
+    const WALK_M_PER_MIN = 80;       // ความเร็วเดินเฉลี่ย (~4.8 กม./ชม.)
+    const MAX_ACCURACY_M = 150;      // ข้ามพิกัดที่ GPS คลาดเคลื่อนมากกว่านี้
+    const SAFEWAY_ALERT_ENDPOINT = ''; // ใส่ URL ของ backend (POST JSON) เมื่อต้องการส่งแจ้งเตือนอัตโนมัติจริง
+
+    const trip = { seq: 0, route: null, watchId: null, armed: false, offCount: 0, alerted: false, from: '', to: '' };
+
+    // ---------- Toast ----------
+    let tripToastTimer = null;
+    function tripToast(text, opts) {
+      opts = opts || {};
+      const box = document.getElementById('tripToast');
+      box.innerHTML = '';
+      box.classList.toggle('danger', !!opts.danger);
+      const p = document.createElement('div'); p.className = 'trip-toast-text'; p.textContent = text;
+      box.appendChild(p);
+      if (opts.smsHref) {
+        const a = document.createElement('a'); a.href = opts.smsHref; a.className = 'trip-toast-btn'; a.textContent = 'Send via SMS';
+        box.appendChild(a);
+      }
+      const x = document.createElement('button'); x.type = 'button'; x.className = 'trip-toast-x'; x.setAttribute('aria-label', 'Close');
+      x.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      x.onclick = () => { box.hidden = true; };
+      box.appendChild(x);
+      box.hidden = false;
+      clearTimeout(tripToastTimer);
+      if (!opts.sticky) tripToastTimer = setTimeout(() => { box.hidden = true; }, 7000);
+    }
+
+    function setTripStatus(text, mode) {
+      const el = document.getElementById('tripStatus');
+      if (!text) { el.hidden = true; return; }
+      el.hidden = false;
+      el.classList.toggle('off', mode === 'off');
+      el.classList.toggle('wait', mode === 'wait');
+      document.getElementById('tripStatusText').textContent = text;
+    }
+
+    // ---------- เพิ่มรายการใหม่ในกระดิ่งแจ้งเตือน (ไม่เด้งขัดจังหวะ) ----------
+    function addNotification(text) {
+      const mk = () => {
+        const p = document.createElement('p');
+        p.className = 'mb-3';
+        p.style.cssText = 'font-size:1rem;line-height:1.4;';
+        p.textContent = text;
+        return p;
+      };
+      const list = document.getElementById('notiList');
+      if (list) list.prepend(mk());
+      const mb = document.querySelector('#mobileNotiModal .modal-body');
+      const hr = mb && mb.querySelector('hr');
+      if (hr) hr.after(mk());
+    }
+
+    // ---------- Geo helpers ----------
+    function hav(a, b) {
+      const R = 6371000, r = Math.PI / 180;
+      const dLat = (b[0] - a[0]) * r, dLon = (b[1] - a[1]) * r;
+      const s = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dLon / 2) ** 2;
+      return 2 * R * Math.asin(Math.sqrt(s));
+    }
+    function toXY(lat, lon, lat0) {
+      const R = 6371000, r = Math.PI / 180;
+      return [lon * r * Math.cos(lat0 * r) * R, lat * r * R];
+    }
+    // หาจุดที่ใกล้ที่สุดบนเส้นทาง → { d: ระยะห่างจากเส้น(ม.), along: ระยะที่เดินไปตามเส้น(ม.) }
+    function projectOnRoute(lat, lon) {
+      const c = trip.route.coords, cum = trip.route.cum;
+      const p = toXY(lat, lon, lat);
+      let best = { d: Infinity, along: 0 };
+      for (let i = 0; i < c.length - 1; i++) {
+        const a = toXY(c[i][0], c[i][1], lat), b = toXY(c[i + 1][0], c[i + 1][1], lat);
+        const dx = b[0] - a[0], dy = b[1] - a[1], len2 = dx * dx + dy * dy;
+        let t = len2 ? ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / len2 : 0;
+        t = Math.max(0, Math.min(1, t));
+        const d = Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy));
+        if (d < best.d) best = { d, along: cum[i] + t * (cum[i + 1] - cum[i]) };
+      }
+      return best;
+    }
+
+    // ---------- สร้างเส้นทางหลัก (Nominatim + OSM foot routing) ----------
+    async function tripGeocode(q) {
+      const m = q.match(/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/);
+      if (m) return [parseFloat(m[1]), parseFloat(m[2])];
+      const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=th&q=' + encodeURIComponent(q));
+      const j = await res.json();
+      if (!j.length) throw new Error('not found: ' + q);
+      return [parseFloat(j[0].lat), parseFloat(j[0].lon)];
+    }
+    async function tripBuildRoute(from, viaList, to) {
+      const pts = [];
+      for (const q of [from, ...viaList, to]) pts.push(await tripGeocode(q));
+      const path = pts.map(p => p[1] + ',' + p[0]).join(';');
+      const res = await fetch('https://routing.openstreetmap.de/routed-foot/route/v1/foot/' + path + '?overview=full&geometries=geojson');
+      const j = await res.json();
+      if (!j.routes || !j.routes.length) throw new Error('no route');
+      const coords = j.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+      const cum = [0];
+      for (let i = 1; i < coords.length; i++) cum.push(cum[i - 1] + hav(coords[i - 1], coords[i]));
+      return { coords, cum, total: cum[cum.length - 1] };
+    }
+
+    // ---------- แสดงระยะทาง/เวลาที่เหลือ ----------
+    function showRemaining(meters) {
+      const mins = Math.max(1, Math.ceil(meters / WALK_M_PER_MIN));
+      const dist = meters >= 1000 ? (meters / 1000).toFixed(1) + ' km' : Math.round(meters) + ' m';
+      document.getElementById('routeTime').innerText = mins + ' min';
+      document.getElementById('routeDistance').innerText = dist;
+      document.getElementById('routeSummaryText').innerText = `${mins} min - ${Math.round(meters)} m`;
+      return { mins, dist };
+    }
+
+    // ---------- รายชื่อคนที่ไว้ใจ (อ่านจากรายการ People ในหน้า) ----------
+    function getTrustedContacts() {
+      const out = [];
+      document.querySelectorAll('#peopleList .person-item').forEach(it => {
+        const call = it.querySelector('.btn-call');
+        const m = call && (call.getAttribute('onclick') || '').match(/'([^']*)'\s*,\s*'([^']*)'/);
+        const nameEl = it.querySelector('.fw-bold');
+        out.push({ name: m ? m[1] : (nameEl ? nameEl.textContent.trim() : ''), phone: m ? m[2] : '' });
+      });
+      return out.filter(c => c.name);
+    }
+    function tripUserName() {
+      try { const s = JSON.parse(localStorage.getItem('safeway-profile-v1')) || {}; if (s.edit0) return s.edit0; } catch (e) {}
+      return 'ผู้ใช้ SafeWay';
+    }
+
+    // ---------- ส่งข้อมูลพิกัดเมื่อออกนอกเส้นทาง (Background alert: ไม่เด้ง toast / ไม่เปิดแอป SMS) ----------
+    function sendOffRouteAlert(lat, lon) {
+      const contacts = getTrustedContacts();
+      const link = `https://maps.google.com/?q=${lat.toFixed(6)},${lon.toFixed(6)}`;
+      const msg = `⚠️ SafeWay: ${tripUserName()} เดินออกนอกเส้นทางที่ตั้งไว้ (${trip.from} → ${trip.to})\n` +
+                  `Left the planned route.\nพิกัดปัจจุบัน / Current location: ${link}`;
+      const names = contacts.map(c => c.name).join(', ') || 'your trusted contacts';
+
+      if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
+
+      if (SAFEWAY_ALERT_ENDPOINT) {
+        // ส่งเงียบๆ เบื้องหลัง (keepalive ให้ส่งต่อได้แม้ผู้ใช้สลับหน้า)
+        fetch(SAFEWAY_ALERT_ENDPOINT, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+          body: JSON.stringify({ type: 'off_route', message: msg, lat, lon, contacts })
+        }).catch(err => console.warn('Alert send failed:', err));
+        addNotification(`You left the route. Your location was sent to ${names} in the background.`);
+      } else {
+        console.log('[SafeWay] Off-route alert (no endpoint configured) →', names, '\n' + msg);
+        addNotification('You left the route. (No alert server configured yet — location was not sent.)');
+      }
+    }
+
+    // ---------- ประมวลผลตำแหน่งที่เดินจริง ----------
+    function onTripPosition(pos) {
+      if (!trip.route) return;
+      const lat = pos.coords.latitude, lon = pos.coords.longitude, acc = pos.coords.accuracy || 0;
+      if (acc > MAX_ACCURACY_M) return;
+
+      const pr = projectOnRoute(lat, lon);
+      const tol = Math.max(OFF_ROUTE_M, Math.min(acc, 100));
+
+      // เริ่มเฝ้าระวังหลังผู้ใช้เข้ามาอยู่บนเส้นทางแล้วอย่างน้อย 1 ครั้ง (กันเตือนผิดตอนยังไม่ถึงจุดเริ่ม)
+      if (!trip.armed) {
+        if (pr.d <= tol) trip.armed = true;
+        else { setTripStatus('Waiting for you to join the route…', 'wait'); return; }
+      }
+
+      const remaining = Math.max(0, trip.route.total - pr.along);
+      const r = showRemaining(remaining);
+
+      if (remaining <= ARRIVE_M) {
+        tripToast('🎉 You have arrived at your destination.');
+        stopTrip();
+        return;
+      }
+
+      if (pr.d > tol) {
+        trip.offCount++;
+        setTripStatus(`Off route · ${Math.round(pr.d)} m away`, 'off');
+        if (trip.offCount >= 2 && !trip.alerted) {   // ยืนยัน 2 ครั้งติดกันกัน GPS กระโดด
+          trip.alerted = true;
+          sendOffRouteAlert(lat, lon);
+        }
+      } else {
+        trip.offCount = 0;
+        if (trip.alerted) { trip.alerted = false; tripToast('Back on the main route.'); }
+        setTripStatus(`Tracking · ${r.dist} left (${r.mins} min)`);
+      }
+    }
+
+    function onTripError(err) {
+      tripToast('Cannot track your location. Please allow GPS access.', { sticky: true });
+      setTripStatus('');
+    }
+
+    // ---------- เริ่ม/หยุดการติดตาม ----------
+    function stopTrip() {
+      trip.seq++;
+      if (trip.watchId !== null && navigator.geolocation) navigator.geolocation.clearWatch(trip.watchId);
+      trip.watchId = null; trip.route = null; trip.armed = false; trip.offCount = 0; trip.alerted = false;
+      setTripStatus('');
+    }
+
+    async function startTrip(from, viaList, to) {
+      stopTrip();
+      const seq = trip.seq;
+      trip.from = from; trip.to = to;
+      if (!navigator.geolocation) { tripToast('This browser does not support location tracking.'); return; }
+      setTripStatus('Preparing route…', 'wait');
+      try {
+        const route = await tripBuildRoute(from, viaList, to);
+        if (seq !== trip.seq) return;            // ผู้ใช้ค้นหาเส้นทางใหม่ไปแล้ว
+        trip.route = route;
+        showRemaining(route.total);
+        setTripStatus('Waiting for GPS…', 'wait');
+        trip.watchId = navigator.geolocation.watchPosition(onTripPosition, onTripError,
+          { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 });
+      } catch (e) {
+        if (seq !== trip.seq) return;
+        console.warn('Trip route error:', e);
+        setTripStatus('');
+        tripToast('Could not load the route for live tracking.');
+      }
+    }
+
+    // เริ่มติดตามทุกครั้งที่ค้นหาเส้นทาง / กด Check in
+    const _calcRouteTrip = calculateSafeRoute;
+    calculateSafeRoute = function () {
+      _calcRouteTrip();
+      const from = document.getElementById('routeFrom').value.trim();
+      const to = document.getElementById('routeTo').value.trim();
+      if (from && to) startTrip(from, [], to);
+    };
+
+    // เมื่อเลือก "Safer route" ให้ใช้เส้นทางนั้นเป็นเส้นทางหลักแทน
+    const _applySaferTrip = applySaferRoute;
+    applySaferRoute = function (r) {
+      _applySaferTrip(r);
+      const from = document.getElementById('routeFrom').value.trim();
+      const to = document.getElementById('routeTo').value.trim();
+      if (!from || !to || !(r.dest || r.via)) return;
+      if (r.dest) startTrip(from, [], r.dest);
+      else startTrip(from, [r.via], to);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safeway - Map</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+/* =====================================================================
+   SafeWay – Header + Footer
+   ===================================================================== */
+:root{
+  --indigo:#3949B2; --navy:#13388E; --green:#34AF67; --blue:#3C79C5;
+  --red:#DF3C3C; --black:#000000; --white:#ffffff; --grey:#E9E8E8;
+  --grey-text:#6b6b6b; --font:"Prompt","Kanit",system-ui,sans-serif;
+  --pad-x:84px; --text:var(--black); --surface:var(--white);
+  --line:var(--grey); --nav-bg:var(--blue); --foot-bg:var(--blue);
+  --head-blue:var(--blue); --search-bg:var(--white); --focus:var(--navy);
+}
+
+.nav,.nav *,.foot,.foot *{margin:0;padding:0;box-sizing:border-box}
+.nav,.foot{font-family:var(--font);font-size:14px;line-height:1.4}
+.nav :focus-visible,.foot :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.nav{display:block;flex-wrap:nowrap;background:var(--nav-bg);color:var(--white);position:sticky;top:0;z-index:20;overflow-x:clip}
+.nav-in{display:flex;align-items:center;gap:38px;max-width:1440px;margin:auto;padding:24px min(1vw,14px) 24px var(--pad-x)}
+.logo{width:50px;height:50px;border-radius:50%;background:var(--white);display:grid;place-items:center;overflow:hidden;flex:none}
+.logo img{width:100%;height:100%;object-fit:contain;padding:3px}
+.links{display:flex;gap:56px;list-style:none;font-weight:500;font-size:18px}
+.links a{color:var(--white);text-decoration:none;padding-bottom:4px;border-bottom:2px solid transparent}
+.links a[aria-current]{border-color:var(--white)}
+.search{display:flex;align-items:center;gap:12px;background:var(--search-bg);color:var(--grey-text);border-radius:999px;padding:10px 20px;flex:1 1 auto;max-width:480px;min-width:0}
+.search input{border:0;outline:0;background:none;font:inherit;font-size:15px;width:100%;color:var(--black);min-width:0;box-shadow:none}
+.nav-ico{display:flex;gap:10px;align-items:center;margin-left:auto}
+.search+.nav-ico{margin-left:auto}
+@media (min-width:1101px){
+  .nav-in{padding-right:var(--pad-x)}
+  .links{gap:clamp(28px,3.9vw,56px)}
+  .links a{white-space:nowrap}
+  .search{flex:0 1 300px;max-width:none;margin-left:auto;padding:7px 22px;gap:12px}
+  .search .icon{width:22px;height:22px}
+  .search input{font-size:17px}
+  .search+.nav-ico{margin-left:-18px}
+}
+.circle{width:50px;height:50px;border-radius:50%;background:var(--white);color:var(--black);display:grid;place-items:center;font-size:22px;text-decoration:none}
+.circle:hover{color:var(--black)}
+.circle[aria-label="โปรไฟล์"] .icon{fill:currentColor}
+.burger{display:none;background:none;border:0;color:var(--white);font-size:32px;cursor:pointer}
+
+.drawer{display:block;position:absolute;top:100%;right:0;z-index:30;width:clamp(240px,34vw,300px);overflow:hidden;
+  filter:drop-shadow(0 10px 12px rgba(19,56,142,.18));visibility:hidden;transition:visibility 0s linear .28s}
+.drawer.open{visibility:visible;transition:visibility 0s}
+.drawer-in{padding:36px 0 40px;background:var(--surface);color:var(--text);border-bottom:3px solid var(--head-blue);border-radius:0 0 20px 20px;
+  transform:translateY(-100%);transition:transform .28s ease}
+.drawer.open .drawer-in{transform:translateY(0)}
+.drawer a{display:block;color:inherit;text-decoration:none;font-weight:600;font-size:18px;padding:14px 36px}
+.drawer a:hover,.drawer a:focus-visible{background:var(--line);color:inherit}
+.drawer .m-only{display:none} 
+@media (min-width:1101px){.drawer{display:none!important}}
+
+.foot{background:var(--foot-bg);color:var(--white);padding:52px 0 80px}
+.foot-in{max-width:1440px;margin:auto;padding:0 var(--pad-x);display:grid;grid-template-columns:44% 24% 1fr;column-gap:0}
+.foot h4{font-size:20px;font-weight:500;margin-bottom:10px;line-height:1.4}
+.foot-in>div:first-child h4{font-size:26px}
+.foot p{font-size:14px;font-weight:300}
+.foot-in>div:first-child p{max-width:520px}
+.social{display:flex;gap:10px;flex-wrap:wrap}
+.social a{width:64px;height:64px;border-radius:50%;background:var(--white);color:var(--blue);display:grid;place-items:center;font-size:40px;line-height:1;text-decoration:none}
+.social a img{width:24px;height:24px;object-fit:contain}
+
+@media (max-width:1100px){
+  :root{--pad-x:64px}
+  .nav-in{gap:14px;padding:20px var(--pad-x)}
+  .logo{width:64px;height:64px}
+  .links{display:none}
+  .burger{display:block}
+  .search{flex:1;max-width:none;padding:8px 18px}
+  .nav-ico{gap:16px;margin-left:12px}
+  .circle{width:50px;height:50px}
+  .nav-ico .burger{margin-left:2px}
+  .foot{padding:56px 0 70px}
+  .foot-in{grid-template-columns:1fr 1fr 1.6fr;column-gap:20px}
+  .foot-in>div:first-child h4{font-size:18px}
+  .foot h4{font-size:18px}
+  .social a{width:52px;height:52px;font-size:32px}
+  .social{gap:6px}
+}
+
+@media (max-width:599px){
+  :root{--pad-x:34px}
+  .nav-in{gap:15px;padding:23px var(--pad-x)}
+  .logo{width:46px;height:46px}
+  .search{padding:5px 12px;font-size:12px}
+  .search input{font-size:12px}
+  .nav-ico{margin-left:4px}
+  .nav-ico .profile-circle {display:none}
+  .nav-ico .noti-desktop {display:none !important;}
+  .burger{font-size:30px}
+  .drawer{width:clamp(220px,62vw,280px)}
+  .drawer-in{padding:16px 0 20px;border-radius:0 0 24px 24px}
+  .drawer a{font-size:15px;font-weight:500;padding:12px 24px; cursor: pointer;}
+  .drawer .m-only{display:block}
+  .foot{padding:36px 0 44px}
+  .foot-in{grid-template-columns:1fr;row-gap:18px}
+  .foot-in>div:first-child h4,.foot h4{font-size:16px}
+  .foot p{font-size:12px}
+  .social a{width:56px;height:56px;font-size:34px}
+  .social a img{width:19px;height:19px}
+}
+
+/* =====================================================================
+   ส่วนของหน้า Map
+   ===================================================================== */
+body { font-family: var(--font); background: var(--blue); }
+.page-pad { padding-left: var(--pad-x); padding-right: var(--pad-x); max-width: 1440px; margin-left: auto; margin-right: auto; }
+.hero {
+  position: relative;
+  background-color: #cfe9c9;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+  background-image: url('../img/Bg-Mobile.JPG'), linear-gradient(#8ec8f5, #cfe9c9);
+}
+@media (min-width: 768px) { .hero { background-image: url('../img/Bg-Tablet.JPG'), linear-gradient(#8ec8f5, #cfe9c9); } }
+@media (min-width: 1200px) { .hero { background-image: url('../img/Bg-Desktop.PNG'), linear-gradient(#8ec8f5, #cfe9c9); } }
+
+.page-title { font-size: 1.9rem; font-weight: 600; margin: 0; color: #000; }
+@media (max-width: 767px) { .page-title { font-size: 1.4rem; } }
+
+.map-box-container { background: #e9e8e8; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-height: 60vh; z-index: 1;}
+#googleMap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;}
+
+/* ปุ่มควบคุมแผนที่ขวาบนแคปซูล (Layer, Zoom) */
+.map-controls-top-right {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000; 
+  overflow: hidden;
+}
+.map-controls-top-right .map-btn {
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #333;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+.map-controls-top-right .map-btn:hover { background: #f1f1f1; }
+.map-controls-top-right .map-btn:active { background: #e0e0e0; }
+.map-controls-top-right .btn-divider { margin: 0; border: 0; border-top: 1px solid #e0e0e0; width: 100%; }
+
+/* ปุ่มตำแหน่งขวาล่าง */
+.map-controls-bottom-right { position: absolute; bottom: 20px; right: 20px; z-index: 1000; }
+.map-controls-bottom-right .map-btn-circle {
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  font-size: 18px;
+  transition: background 0.2s;
+}
+.map-controls-bottom-right .map-btn-circle:hover { background: #f1f1f1; }
+
+/* Noti Styles */
+.noti-circle::after { display: none !important; }
+.noti-dot { position: absolute; top: 12px; right: 12px; width: 11px; height: 11px; background-color: var(--red); border-radius: 50%; border: 2px solid var(--white); }
+.noti-menu { width: 320px; border-radius: 20px; margin-top: 15px !important; }
+.noti-dot-mobile { position: absolute; top: 18px; left: 155px; width: 8px; height: 8px; background-color: var(--red); border-radius: 50%; }
+
+/* ซ่อนปุ่มเดิมของ Google Maps ใน Iframe ให้มากที่สุดด้วยเทคนิค CSS (อาจจะซ่อนได้ไม่หมดแต่ดูสะอาดขึ้น) */
+#googleMap iframe { filter: contrast(1.05); }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 1 1 12 0v6l2 2H4z"/><path d="M10 21h4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="home.html" aria-label="SafeWay">
+      <img src="../img/logo.png" alt="SafeWay" onerror="this.style.display='none'">
+    </a>
+    <nav aria-label="เมนูหลัก">
+      <ul class="links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="map.html" aria-current="page">Map</a></li>
+        <li><a href="savedplace.html">Saved Places</a></li>
+        <li><a href="people.html">People</a></li>
+      </ul>
+    </nav>
+    <form class="search" action="search.html" method="get" role="search">
+      <svg class="icon" width="18" height="18"><use href="#i-search"/></svg>
+      <input type="search" name="q" placeholder="ค้นหาเส้นทาง" aria-label="ค้นหาเส้นทาง">
+    </form>
+    
+    <div class="nav-ico">
+      <a class="circle profile-circle" href="setting.html" aria-label="โปรไฟล์"><svg class="icon"><use href="#i-user"/></svg></a>
+      <div class="dropdown d-inline-flex noti-desktop">
+        <a class="circle noti-circle dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="การแจ้งเตือน">
+          <svg class="icon"><use href="#i-bell"/></svg>
+          <span class="noti-dot"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end noti-menu shadow border-0">
+          <div class="px-4 pt-4 pb-3"><h5 class="mb-0 fw-bold" style="font-size: 1.15rem; color: #000;">Notifications</h5></div>
+          <hr class="my-0 mx-3" style="border-color: #d4d4d4; opacity: 1;">
+          <div class="px-4 py-4 text-dark">
+            <p class="mb-3" style="font-size: 1rem; line-height: 1.4;"><strong>Kento Yamazaki</strong> shared live<br>location with you</p>
+            <p class="mb-1" style="font-size: 1rem; line-height: 1.4;">Routes around Silpakorn Univ.<br>have normal lighting</p>
+          </div>
+        </div>
+      </div>
+      <button class="burger" id="burger" type="button" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="drawer"><svg class="icon"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+  
+  <nav class="drawer" id="drawer" aria-label="เมนูมือถือ">
+    <div class="drawer-in">
+      <a href="home.html">Home</a><a href="map.html">Map</a><a href="savedplace.html">Saved Places</a><a href="people.html">People</a><a href="setting.html" class="m-only">Profile &amp; Settings</a>
+      <a href="#" class="m-only position-relative" data-bs-toggle="modal" data-bs-target="#mobileNotiModal" id="mobileNotiLink">New Message<span class="noti-dot-mobile"></span></a>
+    </div>
+  </nav>
+</header>
+
+<main class="hero flex-grow-1 d-flex flex-column">
+  <div class="container-fluid page-pad pt-4 pb-5 d-flex flex-column flex-grow-1">
+    <h1 class="page-title mb-3">Map</h1>
+
+    <div class="map-box-container position-relative flex-grow-1">
+      <!-- กล่องแสดงแผนที่ Google -->
+      <div id="googleMap"></div>
+
+      <!-- ปุ่มขวาบน: แคปซูล (Layer, Zoom) ตามดีไซน์ -->
+      <div class="map-controls-top-right">
+        <button id="layerBtn" class="map-btn" aria-label="เปลี่ยนมุมมองแผนที่"><i class="fa-solid fa-layer-group"></i></button>
+        <hr class="btn-divider">
+        <button id="zoomInBtn" class="map-btn" aria-label="ซูมเข้า"><i class="fa-solid fa-plus"></i></button>
+        <hr class="btn-divider">
+        <button id="zoomOutBtn" class="map-btn" aria-label="ซูมออก"><i class="fa-solid fa-minus"></i></button>
+      </div>
+
+      <!-- ปุ่มขวาล่าง: ตำแหน่งปัจจุบัน วางไว้เป็น UI -->
+      <div class="map-controls-bottom-right">
+        <button id="compassBtn" class="map-btn-circle" aria-label="ตำแหน่งปัจจุบัน"><i class="fa-solid fa-crosshairs"></i></button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <div><h4>About us</h4><p>Smart route planning and personal safety web app designed to keep your everyday journey secure and worry-free.</p></div>
+    <div><h4>Contact Us</h4><p>Email : safeway@gmail.com<br>Tel : 012-345-6789</p></div>
+    <div><h4>Follow Us</h4>
+      <div class="social">
+        <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-line"></i></a>
+        <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ==========================================
+     Mobile Notification Modal (กล่องแจ้งเตือนมือถือ)
+     ========================================== -->
+<div class="modal fade" id="mobileNotiModal" tabindex="-1" aria-labelledby="mobileNotiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm px-3">
+    <div class="modal-content shadow border-0" style="border-radius: 20px;">
+      <div class="modal-header border-0 pb-0 pt-4 px-4">
+        <h5 class="modal-title fw-bold" id="mobileNotiModalLabel" style="font-size: 1.15rem; color: #000;">Notifications</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-dark pt-3 pb-4 px-4">
+        <hr class="mt-0 mb-3" style="border-color: #d4d4d4; opacity: 1;">
+        <p class="mb-3" style="font-size: 1rem; line-height: 1.4;"><strong>Kento Yamazaki</strong> shared live<br>location with you</p>
+        <p class="mb-1" style="font-size: 1rem; line-height: 1.4;">Routes around Silpakorn Univ.<br>have normal lighting</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ==========================================
+// ควบคุม Header / เมนูมือถือ
+// ==========================================
+const burger = document.getElementById("burger");
+const drawer = document.getElementById("drawer");
+function setMenu(open) { drawer.classList.toggle("open", open); burger.setAttribute("aria-expanded", open ? "true" : "false"); }
+burger.addEventListener("click", e => { e.stopPropagation(); setMenu(!drawer.classList.contains("open")); });
+document.addEventListener("click", e => { if (!drawer.contains(e.target)) setMenu(false); });
+document.getElementById("mobileNotiLink").addEventListener("click", () => setMenu(false));
+
+// ==========================================
+// ระบบแผนที่ Google Maps ผ่าน Iframe (ฟรี ไม่ใช้ API)
+// ==========================================
+let currentZoom = 17; // ระดับการซูมเริ่มต้น
+const defaultLat = 13.8203; // พิกัดละติจูด (มหาวิทยาลัยศิลปากร วิทยาเขตพระราชวังสนามจันทร์)
+const defaultLng = 100.0407; // พิกัดลองจิจูด
+
+const mapContainer = document.getElementById("googleMap");
+const mapIframe = document.createElement("iframe");
+mapIframe.style.cssText = "border:0;width:100%;height:100%;display:block;";
+mapIframe.allowFullscreen = true;
+mapIframe.referrerPolicy = "no-referrer-when-downgrade";
+mapContainer.appendChild(mapIframe);
+
+// ฟังก์ชันสำหรับรีเฟรชแผนที่เมื่อมีการเปลี่ยนระดับการซูม
+function updateMap() {
+    mapIframe.src = `https://maps.google.com/maps?q=${defaultLat},${defaultLng}&z=${currentZoom}&hl=th&output=embed`;
+}
+
+// เรียกโหลดแผนที่ครั้งแรกตอนเปิดหน้าเว็บ
+updateMap();
+
+// ==========================================
+// เชื่อมปุ่ม +/- เข้ากับแผนที่ให้กดซูมได้จริง
+// ==========================================
+document.getElementById('zoomInBtn').addEventListener('click', () => {
+    if(currentZoom < 21) {
+        currentZoom++; // เพิ่มค่าความซูม
+        updateMap();   // โหลดแผนที่ใหม่ด้วยค่าซูมที่เพิ่มขึ้น
+    }
+});
+
+document.getElementById('zoomOutBtn').addEventListener('click', () => {
+    if(currentZoom > 1) {
+        currentZoom--; // ลดค่าความซูม
+        updateMap();   // โหลดแผนที่ใหม่ด้วยค่าซูมที่ลดลง
+    }
+});
+
+// ==========================================
+// ปุ่มตกแต่งตามดีไซน์ (ปล่อยไว้เฉยๆ ไม่ทำอะไร)
+// ==========================================
+document.getElementById('layerBtn').addEventListener('click', () => {
+    // ใส่แค่เอาไว้โชว์ UI ไม่เขียนการทำงานดาวเทียมเพราะทำไม่ได้ใน Iframe ครับ
+});
+
+document.getElementById('compassBtn').addEventListener('click', () => {
+    // ปล่อยว่างไว้เป็นปุ่มประดับ UI เฉยๆ ครับ
+});
+
+// ==========================================
+// ปุ่มตำแหน่งปัจจุบัน (กลับมาจุดปักหมุดเริ่มต้น)
+// ==========================================
+document.getElementById('compassBtn').addEventListener('click', () => {
+    // รีเซ็ตค่าซูมกลับเป็นค่าเริ่มต้น (ถ้าต้องการให้ซูมกลับมาเท่าเดิมด้วย)
+    currentZoom = 17; 
+    
+    // โหลดแผนที่ใหม่กลับมาที่พิกัด defaultLat, defaultLng ที่ตั้งไว้
+    updateMap(); 
+});
+</script>
+</body>
+</html>

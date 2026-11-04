@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SafeWay - Walk Home Safe</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 & FontAwesome Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+/* ==========================================================
+   SafeWay - หน้า Login (CSS รวมอยู่ในไฟล์นี้)
+   ========================================================== */
+* { box-sizing: border-box; }
+
+:where(body.safeway-bg) * {
+  font-family: 'Prompt', 'Quicksand', sans-serif;
+}
+
+body.safeway-bg {
+  background-color: #d1e5f7;
+  min-height: 100vh;
+  padding: 0.5rem !important;
+  margin: 0;
+}
+
+/* ปุ่ม TH / EN */
+.lang-switch { font-size: 0.95rem; font-weight: 600; }
+.lang-btn { color: #475569; cursor: pointer; transition: color 0.2s ease; }
+.lang-btn.active { color: #0f172a; font-weight: 700; }
+
+/* ตัวการ์ดหลัก */
+.safeway-card {
+  max-width: 95vw !important;
+  width: 100%;
+  height: 96vh !important;
+  min-height: 650px !important;
+  border-radius: 28px !important;
+  background-image: url('img/Bg-Desktop.PNG') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: none;
+}
+
+.min-vh-card { height: 100% !important; min-height: 100% !important; }
+
+/* ฝั่งซ้าย Logo & Branding (Desktop) */
+@media (min-width: 992px) {
+  .left-branding {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    border-right: 1.5px solid rgba(0, 0, 0, 0.15);
+    background: transparent !important;
+    padding-top: 5rem !important;
+    padding-bottom: 2rem !important;
+    height: 100% !important;
+  }
+
+  .right-form-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background: transparent !important;
+    padding: 2rem !important;
+    height: 100% !important;
+  }
+}
+
+.brand-logo-circle {
+  width: 140px !important;
+  height: 140px !important;
+  min-width: 140px !important;
+  min-height: 140px !important;
+  background-color: #ffffff !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 14px !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+}
+.brand-logo-circle img { max-height: 100%; object-fit: contain; }
+
+.brand-title {
+  font-size: 2.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  color: #000000 !important;
+}
+.brand-subtitle { font-size: 1.15rem !important; color: #1e293b !important; }
+
+.brand-title-mobile { font-size: 2rem !important; letter-spacing: 1px !important; }
+.brand-subtitle-mobile { font-size: 0.95rem !important; }
+
+.form-wrapper { max-width: 440px; width: 100%; margin: 0 auto; }
+.welcome-header-wrapper { text-align: left; }
+
+.welcome-heading {
+  font-size: 2.2rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  line-height: 1.25 !important;
+}
+.welcome-subtext {
+  font-size: 0.95rem !important;
+  color: #475569 !important;
+  line-height: 1.6 !important;
+}
+
+/* Input & Buttons */
+.safeway-input {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0;
+  border-radius: 35px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+.safeway-input:focus {
+  border-color: #0f2b7b;
+  box-shadow: 0 0 0 0.25rem rgba(15, 43, 123, 0.15);
+}
+
+.input-icon, .password-toggle { font-size: 1.05rem; cursor: pointer; z-index: 5; }
+
+.btn-safeway-primary {
+  background-color: #0f2b7b !important;
+  border: none;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 14px rgba(15, 43, 123, 0.35);
+  transition: all 0.2s ease;
+}
+.btn-safeway-primary:hover { background-color: #081b52 !important; transform: translateY(-2px); }
+
+/* ปุ่ม Social Login */
+.btn-social-pill {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0;
+  color: #334155 !important;
+  font-weight: 500;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+.btn-social-pill:hover { background-color: #f8fafc !important; transform: translateY(-1px); }
+
+/* Tablet & Mobile */
+@media (max-width: 991.98px) {
+  body.safeway-bg { padding: 0.75rem !important; }
+
+  .safeway-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 92vh !important;
+    margin: 0 auto;
+    border-radius: 28px !important;
+  }
+
+  .left-branding { display: none !important; }
+
+  .right-form-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 2rem 1.5rem !important;
+    margin: 0 auto !important;
+    min-height: 85vh !important;
+  }
+
+  .form-wrapper { max-width: 500px !important; width: 100% !important; margin: 0 auto !important; }
+  .welcome-header-wrapper { text-align: center !important; }
+  .welcome-heading { font-size: 2rem !important; }
+}
+
+@media (max-width: 575.98px) {
+  .right-form-panel { padding: 1.5rem 1rem !important; }
+  .form-wrapper { max-width: 100% !important; }
+
+  .brand-logo-circle {
+    width: 95px !important;
+    height: 95px !important;
+    min-width: 95px !important;
+    min-height: 95px !important;
+    padding: 10px !important;
+  }
+
+  .brand-title-mobile { font-size: 1.75rem !important; }
+  .welcome-heading { font-size: 1.65rem !important; }
+
+  .safeway-input,
+  .btn-safeway-primary,
+  .btn-social-pill {
+    padding-top: 11px !important;
+    padding-bottom: 11px !important;
+    font-size: 0.9rem;
+  }
+}
+
+/* iPad (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .safeway-card { background-image: url('img/Bg-Tablet.JPG') !important; }
+  .form-wrapper { max-width: 420px !important; }
+
+  .brand-logo-circle {
+    width: 180px !important;
+    height: 180px !important;
+    min-width: 180px !important;
+    min-height: 180px !important;
+    padding: 18px !important;
+  }
+
+  .brand-title-mobile { font-size: 2.5rem !important; }
+  .brand-subtitle-mobile { font-size: 1.05rem !important; }
+
+  .welcome-header-wrapper { margin-top: 2.5rem; margin-bottom: 2rem !important; }
+  .welcome-heading { font-size: 1.45rem !important; }
+  .welcome-subtext { font-size: 0.75rem !important; }
+
+  .safeway-input { padding-top: 16px; padding-bottom: 16px; font-size: 1.05rem; }
+
+  .btn-safeway-primary,
+  .btn-social-pill {
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.2rem !important;
+  }
+}
+
+/* Mobile (< 768px) พื้นหลัง */
+@media (max-width: 767.98px) {
+  .safeway-card { background-image: url('img/Bg-Mobile.JPG') !important; }
+}
+
+/* iPad Pro 13 แนวตั้ง (992px - 1100px) */
+@media (min-width: 992px) and (max-width: 1100px) and (orientation: portrait) {
+  .safeway-card {
+    background-image: url('img/Bg-Tablet.JPG') !important;
+    height: auto !important;
+    min-height: 92vh !important;
+  }
+
+  .left-branding { display: none !important; }
+
+  .d-lg-none:has(.brand-title-mobile),
+  .d-lg-none:has(.brand-logo-circle) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .right-form-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 2rem 1.5rem !important;
+    margin: 0 auto !important;
+    min-height: 85vh !important;
+  }
+
+  .form-wrapper { max-width: 540px !important; width: 100% !important; margin: 0 auto !important; }
+
+  .brand-logo-circle {
+    width: 220px !important;
+    height: 220px !important;
+    min-width: 220px !important;
+    min-height: 220px !important;
+    padding: 22px !important;
+  }
+
+  .brand-title-mobile { font-size: 3rem !important; }
+  .brand-subtitle-mobile { font-size: 1.2rem !important; }
+
+  .welcome-header-wrapper { text-align: center !important; margin-top: 2.5rem; margin-bottom: 2rem !important; }
+  .welcome-heading { font-size: 1.7rem !important; }
+  .welcome-subtext { font-size: 0.85rem !important; }
+
+  .safeway-input { padding-top: 18px; padding-bottom: 18px; font-size: 1.1rem; }
+
+  .btn-safeway-primary,
+  .btn-social-pill {
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.2rem !important;
+    font-size: 1.1rem;
+  }
+}
+    </style>
+  </head>
+  <body class="safeway-bg d-flex align-items-center justify-content-center">
+
+    <!-- Card ใหญ่ SafeWay -->
+    <div class="safeway-card shadow-lg position-relative overflow-hidden w-100">
+
+      <!-- ปุ่มสลับภาษา TH / EN -->
+      <div class="lang-switch position-absolute top-0 end-0 p-3 p-md-4 z-3">
+        <span class="lang-btn" id="btn-th" onclick="switchLang('th')">TH</span>
+        <span class="text-secondary mx-1">/</span>
+        <span class="lang-btn active" id="btn-en" onclick="switchLang('en')">EN</span>
+      </div>
+
+      <div class="row g-0 h-100 min-vh-card justify-content-center">
+
+        <!-- ฝั่งซ้าย: โลโก้ SafeWay (แสดงเฉพาะ Desktop) -->
+        <div class="col-lg-6 d-none d-lg-flex flex-column align-items-center justify-content-center text-center p-4 p-md-5 left-branding position-relative">
+          <div class="brand-logo-circle mb-3 shadow-sm">
+            <img src="img/logo.png" alt="SafeWay Logo" class="img-fluid" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png';">
+          </div>
+          <h1 class="brand-title fw-bold text-dark mb-1">SAFEWAY</h1>
+          <p class="brand-subtitle text-secondary fw-semibold mb-0">Walk Home Safe</p>
+        </div>
+
+        <!-- ฝั่งขวา: ฟอร์ม Login -->
+        <div class="col-lg-6 col-12 d-flex align-items-center justify-content-center p-4 p-md-5 right-form-panel">
+          <div class="w-100 form-wrapper">
+
+            <!-- โลโก้ด้านบน (แสดงเฉพาะ Tablet / Mobile) -->
+            <div class="d-lg-none d-flex flex-column align-items-center justify-content-center text-center mb-3 mt-1">
+              <div class="brand-logo-circle mb-2 shadow-sm">
+                <img src="img/logo.png" alt="SafeWay Logo" class="img-fluid" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png';">
+              </div>
+              <h2 class="brand-title-mobile fw-bold text-dark mb-0">SAFEWAY</h2>
+              <p class="brand-subtitle-mobile text-secondary fw-semibold mb-0">Walk Home Safe</p>
+            </div>
+
+            <!-- ข้อความต้อนรับ -->
+            <div class="mb-4 welcome-header-wrapper">
+              <h2 class="welcome-heading fw-bold text-dark mb-1" id="txt-welcome">Welcome back!</h2>
+              <p class="welcome-subtext text-muted small mb-0" id="txt-subwelcome">Sign in to start a great day together</p>
+            </div>
+
+            <form action="page/home.html" method="GET">
+
+              <!-- Input: Email / Phone -->
+              <div class="mb-3 position-relative">
+                <span class="input-icon position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                  <i class="fa-regular fa-envelope"></i>
+                </span>
+                <input type="text" class="form-control safeway-input ps-5" id="input-user" placeholder="Email / Phone number" required>
+              </div>
+
+              <!-- Input: Password -->
+              <div class="mb-3 position-relative">
+                <span class="input-icon position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                  <i class="fa-solid fa-lock"></i>
+                </span>
+                <input type="password" class="form-control safeway-input ps-5 pe-5" id="passwordInput" placeholder="Password" required>
+                <span class="password-toggle position-absolute top-50 end-0 translate-middle-y me-3 text-muted" onclick="togglePassword()">
+                  <i class="fa-regular fa-eye" id="toggleIcon"></i>
+                </span>
+              </div>
+
+              <!-- Remember Me & Forgot Password -->
+              <div class="d-flex justify-content-between align-items-center mb-4 fs-7 px-1">
+                <div class="form-check d-flex align-items-center gap-1">
+                  <input class="form-check-input my-0" type="checkbox" id="rememberMe" checked>
+                  <label class="form-check-label text-muted small ms-1" for="rememberMe" id="txt-remember">
+                    Remember me
+                  </label>
+                </div>
+                <a href="forgot-password.html" class="text-decoration-none text-muted small forgot-link" id="txt-forgot">Forgot password?</a>
+              </div>
+
+              <!-- Log In Button -->
+              <button type="submit" class="btn btn-safeway-primary w-100 py-3 fw-bold text-white rounded-pill mb-3 fs-6">
+                <span id="txt-login-btn">Log In</span> <i class="fa-solid fa-arrow-right ms-2"></i>
+              </button>
+
+              <!-- Divider line -->
+              <div class="d-flex align-items-center my-3 text-muted small">
+                <div class="flex-grow-1 border-bottom border-secondary opacity-25"></div>
+                <span class="px-3" id="txt-or">or</span>
+                <div class="flex-grow-1 border-bottom border-secondary opacity-25"></div>
+              </div>
+
+              <!-- Social Login Buttons -->
+              <div class="d-flex flex-column gap-2">
+                <button type="button" class="btn btn-social-pill w-100 py-3 rounded-pill d-flex align-items-center justify-content-center gap-2" onclick="loginWithGoogleReal()">
+                  <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" alt="Google">
+                  <span id="txt-google">Continue with Google</span>
+                </button>
+
+                <button type="button" class="btn btn-social-pill w-100 py-3 rounded-pill d-flex align-items-center justify-content-center gap-2" data-bs-toggle="modal" data-bs-target="#appleLoginModal">
+                  <i class="fa-brands fa-apple fs-5 text-dark"></i>
+                  <span id="txt-apple">Continue with Apple</span>
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Apple Login Modal Popup -->
+    <div class="modal fade" id="appleLoginModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+        <div class="modal-content apple-modal-box overflow-hidden border-0 shadow-lg p-4 p-md-5 text-center position-relative">
+
+          <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+
+          <div class="mb-3 mt-1">
+            <i class="fa-brands fa-apple fa-4x text-dark"></i>
+          </div>
+
+          <h3 class="fw-bold text-dark mb-2">Sign in with Apple</h3>
+          <p class="text-muted small mb-4 lh-sm">
+            Use your Apple ID to sign in to<br>
+            <strong class="text-dark">SAFEWAY</strong> and continue
+          </p>
+
+          <div class="account-item d-flex align-items-center justify-content-between p-3 bg-white rounded-4 border shadow-sm mb-4 cursor-pointer" onclick="window.location.href='page/home.html'">
+            <div class="d-flex align-items-center gap-3">
+              <div class="account-avatar rounded-circle bg-secondary opacity-50"></div>
+              <div class="text-start">
+                <div class="fw-bold text-dark fs-7">Mowwy</div>
+                <div class="text-muted small">Mewwy_24@icloud.com</div>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-muted fs-7"></i>
+          </div>
+
+          <button type="button" class="btn btn-safeway-primary w-100 py-3 fw-bold text-white rounded-pill mb-3" onclick="window.location.href='page/home.html'">
+            Continue
+          </button>
+
+          <div class="mb-4">
+            <a href="forgot-password.html" class="text-muted text-decoration-none small fw-medium">Forgot Apple ID Password?</a>
+          </div>
+
+          <div class="pt-3 border-top d-flex flex-column align-items-center gap-1 cursor-pointer" onclick="window.location.href='page/home.html'">
+            <i class="fa-solid fa-face-smile fs-1 text-dark"></i>
+            <span class="text-muted fs-8 fw-medium">Use Face ID</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Firebase SDK & Script -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyC6mi8yTlO7lSk2-GnAPlikS29SRM-0EFk",
+        authDomain: "safeway-7c648.firebaseapp.com",
+        projectId: "safeway-7c648",
+        storageBucket: "safeway-7c648.firebasestorage.app",
+        messagingSenderId: "193164409149",
+        appId: "1:193164409149:web:c9c40686de0ab0218a6d54",
+        measurementId: "G-CCY77DPF18"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      getRedirectResult(auth)
+        .then((result) => {
+          if (result && result.user) {
+            const user = result.user;
+            alert(`ยินดีต้อนรับคุณ ${user.displayName || user.email}`);
+            window.location.href = "page/home.html";
+          }
+        })
+        .catch((error) => {
+          console.error("เกิดข้อผิดพลาดในการล็อกอิน:", error);
+          alert("การล็อกอินล้มเหลว: " + error.message);
+        });
+
+      window.loginWithGoogleReal = function() {
+        signInWithRedirect(auth, provider);
+      };
+
+      window.togglePassword = function() {
+        const passInput = document.getElementById('passwordInput');
+        const icon = document.getElementById('toggleIcon');
+        if (passInput.type === 'password') {
+          passInput.type = 'text';
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        } else {
+          passInput.type = 'password';
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      };
+
+      const langData = {
+        en: {
+          welcome: "Welcome back!",
+          subwelcome: "Sign in to start a great day together",
+          userPlaceholder: "Email / Phone number",
+          passPlaceholder: "Password",
+          remember: "Remember me",
+          forgot: "Forgot password?",
+          loginBtn: "Log In",
+          or: "or",
+          google: "Continue with Google",
+          apple: "Continue with Apple"
+        },
+        th: {
+          welcome: "ยินดีต้อนรับกลับมา!",
+          subwelcome: "เข้าสู่ระบบเพื่อเริ่มต้นการเดินทางที่ปลอดภัย",
+          userPlaceholder: "อีเมล / เบอร์โทรศัพท์",
+          passPlaceholder: "รหัสผ่าน",
+          remember: "จดจำฉันไว้",
+          forgot: "ลืมรหัสผ่าน?",
+          loginBtn: "เข้าสู่ระบบ",
+          or: "หรือ",
+          google: "เข้าสู่ระบบด้วย Google",
+          apple: "เข้าสู่ระบบด้วย Apple"
+        }
+      };
+
+      window.switchLang = function(lang) {
+        document.getElementById('btn-th').classList.toggle('active', lang === 'th');
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+        document.getElementById('txt-welcome').innerText = langData[lang].welcome;
+        document.getElementById('txt-subwelcome').innerText = langData[lang].subwelcome;
+        document.getElementById('input-user').placeholder = langData[lang].userPlaceholder;
+        document.getElementById('passwordInput').placeholder = langData[lang].passPlaceholder;
+        document.getElementById('txt-remember').innerText = langData[lang].remember;
+        document.getElementById('txt-forgot').innerText = langData[lang].forgot;
+        document.getElementById('txt-login-btn').innerText = langData[lang].loginBtn;
+        document.getElementById('txt-or').innerText = langData[lang].or;
+        document.getElementById('txt-google').innerText = langData[lang].google;
+        document.getElementById('txt-apple').innerText = langData[lang].apple;
+      };
+
+      switchLang('th');
+    </script>
+  </body>
+</html>
